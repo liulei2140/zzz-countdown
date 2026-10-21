@@ -3,9 +3,11 @@ import Layout from '~/layouts/PageLayout.astro';
 
 import Note from '~/components/widgets/Note.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import Content from '~/components/widgets/Content.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
 
 import { SITE } from '~/data/zzz';
+
+import editorialArt from '~/assets/images/editorial-art.jpg';
 
 const metadata = {
   title: 'About ZZZ Countdown: Who Runs This Site and How It Works',
@@ -20,26 +22,36 @@ const metadata = {
     <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">About</p>
     <h1 class="mt-2 text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">About ZZZ Countdown</h1>
     <p class="mt-4 text-xl text-muted">
-      This site exists for one reason: when a Zenless Zone Zero version is about to land, the people searching for it
-      want a timer that is correct, and they want to know where the moment came from.
+      One reason for this site: when a Zenless Zone Zero version is about to land, people want a timer that is correct
+      and they want to know where the moment came from.
     </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={editorialArt.src}
+      alt="An open notebook with a ribbon timeline and small glowing markers above the page"
+      eyebrow="Why this exists"
+      heading="One timer, and the receipt behind it"
+      caption="Original artwork for this site."
+    />
   </section>
 
   <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
     <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">What this site tracks</h2>
-    <div class="mt-4 space-y-4 text-lg text-muted">
-      <p>For every version of Zenless Zone Zero, this site publishes:</p>
-      <ul class="list-disc space-y-2 pl-5">
-        <li>the release and go-live moment, converted into your own time zone;</li>
-        <li>the Phase I and Phase II banner switch dates, each with its own live timer;</li>
-        <li>the pre-download window, the file size per platform and the compensation conditions;</li>
-        <li>the date the version ends, and the date the next version is expected.</li>
-      </ul>
-      <p>
-        The site is built for a specific moment in the version cycle and is meant to be re-checked, not just read once.
-        The version history page is where the six-week rhythm is laid out, because the countdown for 3.4 starts long
-        before 3.4 is announced.
-      </p>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      {
+        [
+          'the release and go-live moment, converted into your own time zone;',
+          'the Phase I and Phase II banner switch dates, each with its own live timer;',
+          'the pre-download window, the file size per platform and the compensation conditions;',
+          'the date the version ends, and when the next version is expected.',
+        ].map((item) => (
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+            <p class="text-sm text-muted">{item}</p>
+          </div>
+        ))
+      }
     </div>
   </section>
 
@@ -48,16 +60,12 @@ const metadata = {
     <div class="mt-4 space-y-4 text-lg text-muted">
       <p>
         Every date comes from an announcement published by HoYoverse, read directly rather than summarised from another
-        site. The maintenance start, the version end and the Phase I switch are printed in those notices, and each one
-        is linked next to the date it supports.
+        site, and each one is linked next to the date it supports.
       </p>
       <p>
         Where HoYoverse has not published something, this site says so. The go-live minute is the clearest example: the
-        official notice gives a maintenance start and a five-hour estimate, never a published go-live time, so the
-        countdown labels that moment as an estimate and the sources page explains the calculation.
-      </p>
-      <p>
-        The full list of announcements, what each one confirms, and the last time it was checked is on the
+        notice gives a maintenance start and a five-hour estimate, never a published go-live time, so that moment is
+        labelled an estimate. The full list is on the
         <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/sources"
           >sources page</a
         >.
@@ -74,8 +82,7 @@ const metadata = {
         them in one place and keeps the receipts.
       </p>
       <p>
-        The site is written in English for an English-speaking audience. If you found a date here that is wrong or
-        outdated, the
+        The site is written in English. If you found a date here that is wrong or outdated, the
         <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/contact"
           >contact page</a
         >
@@ -93,15 +100,24 @@ const metadata = {
   </section>
 
   <section class="mx-auto max-w-4xl px-4 pb-4 mt-10 sm:px-6">
-    <Content
-      tagline="Next"
-      title="Start with the timers"
-      items={[
-        { title: 'Countdown', description: 'Four live timers for the 3.3 cycle.' },
-        { title: 'Release time', description: 'The same moments in 14 time zones.' },
-        { title: 'Banners', description: 'Every 3.3 Signal Search channel with its own timer.' },
-      ]}
-    />
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Start with the timers</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-3">
+      {
+        [
+          { title: 'Countdown', description: 'Four live timers for the 3.3 cycle.', href: '/' },
+          { title: 'Release time', description: 'The same moments in 14 time zones.', href: '/release-time' },
+          { title: 'Banners', description: 'Every 3.3 Signal Search channel with its own timer.', href: '/banners' },
+        ].map((c) => (
+          <a
+            href={c.href}
+            class="rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-primary/50 dark:border-slate-700 dark:bg-slate-900"
+          >
+            <p class="text-base font-bold text-heading">{c.title}</p>
+            <p class="mt-1 text-sm text-muted">{c.description}</p>
+          </a>
+        ))
+      }
+    </div>
   </section>
 
   <CallToAction

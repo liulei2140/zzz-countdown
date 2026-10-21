@@ -13,7 +13,7 @@
     "og": "node scripts/og-image.mjs",
     "build": "npm run og && node scripts/set-site-url.mjs && astro build",
     "preview": "astro preview",
-    "verify": "node scripts/verify-countdown.mjs",
+    "verify": "node scripts/verify-countdown.mjs && node scripts/check-links.mjs",
     "check": "astro check",
     "astro": "astro"
   },

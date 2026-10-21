@@ -4,11 +4,13 @@ import Layout from '~/layouts/PageLayout.astro';
 import Note from '~/components/widgets/Note.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import Features from '~/components/widgets/Features.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
 
 import KeyDates from '~/components/widgets/KeyDates.astro';
 
 import { preDownload, faqs, sourceById } from '~/data/zzz';
+
+import storageArt from '~/assets/images/storage-art.jpg';
 
 const metadata = {
   title: 'ZZZ 3.3 Pre-Download Size for PC, Mobile, PS5 and Xbox',
@@ -18,6 +20,9 @@ const metadata = {
 };
 
 const notice = sourceById('E01')!;
+
+/** Largest download, used to scale the storage bars so the tiles are comparable. */
+const maxGb = Math.max(...preDownload.platforms.map((p) => Number.parseFloat(p.size.replace(/[^\d.]/g, ''))));
 ---
 
 <Layout metadata={metadata}>
@@ -27,25 +32,49 @@ const notice = sourceById('E01')!;
       ZZZ 3.3 pre-download: sizes, deadlines and compensation
     </h1>
     <p class="mt-4 max-w-3xl text-xl text-muted">
-      The 3.3 pre-download ran from <strong class="text-heading">{preDownload.window}</strong>. The numbers below are
-      printed in the official notice, and so are the two things that usually get missed: mobile players could not play
-      while the download ran, and the compensation needed Inter-Knot Lv. 4 before maintenance started.
+      The window ran <strong class="text-heading">{preDownload.window}</strong>. Two things usually get missed: mobile
+      players could not play during the download, and the compensation needed Inter-Knot Lv. 4 before maintenance
+      started.
     </p>
+  </section>
 
-    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={storageArt.src}
+      alt="Stacked translucent data slabs representing download volumes on a dark teal background"
+      eyebrow="Pre-download"
+      heading="How much space each platform needs"
+      caption="Original artwork for this site."
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6" id="sizes">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {
-        preDownload.platforms.map((p) => (
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
-            <p class="text-sm font-semibold text-heading">{p.platform}</p>
-            <p class="mt-2 font-heading text-3xl font-bold text-heading">{p.size}</p>
-            <p class="mt-2 text-sm text-muted">{p.detail}</p>
-          </div>
-        ))
+        preDownload.platforms.map((p) => {
+          const gb = Number.parseFloat(p.size.replace(/[^\d.]/g, ''));
+          return (
+            <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+              <p class="text-sm font-semibold text-heading">{p.platform}</p>
+              <p class="mt-2 font-heading text-5xl font-bold tabular-nums text-heading">
+                {gb}
+                <span class="ml-1 text-2xl font-bold text-muted">GB</span>
+              </p>
+              <div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-slate-800">
+                <div
+                  class="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-600"
+                  style={`width: ${(gb / maxGb) * 100}%`}
+                />
+              </div>
+              <p class="mt-3 text-sm text-muted">{p.detail}</p>
+            </div>
+          );
+        })
       }
     </div>
 
     <p class="mt-4 text-sm text-muted">
-      Source:{' '}
+      Bar length is proportional to the download size. Source:{' '}
       <a
         class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
         href={notice.url}
@@ -57,46 +86,12 @@ const notice = sourceById('E01')!;
     </p>
   </section>
 
-  <section class="mx-auto max-w-7xl px-4 mt-12 sm:px-6">
+  <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6">
     <Note
       variant="warning"
       title="The 3.3 pre-download window has closed."
-      description="It ended at 2026/10/21 05:50 (UTC+8), a few minutes before maintenance started. The sizes and rules below are kept because every version ships the same pattern, and the last section explains what to do differently next time."
+      description="It ended at 2026/10/21 05:50 (UTC+8), a few minutes before maintenance started. The sizes and rules are kept because every version ships the same pattern."
     />
-  </section>
-
-  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="sizes">
-    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">Pre-download window and size by platform</h2>
-    <div class="mt-6 overflow-x-auto">
-      <table class="w-full min-w-[40rem] text-left text-sm">
-        <thead>
-          <tr class="border-b border-gray-200 dark:border-slate-700">
-            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Platform</th>
-            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Pre-download size</th>
-            <th scope="col" class="py-3 pr-4 font-semibold text-heading">How to start it</th>
-            <th scope="col" class="py-3 font-semibold text-heading">Can you play meanwhile?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            preDownload.platforms.map((p) => (
-              <tr class="border-b border-gray-100 dark:border-slate-800">
-                <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
-                  {p.platform}
-                </th>
-                <td class="py-3 pr-4 align-top text-muted">{p.size}</td>
-                <td class="py-3 pr-4 align-top text-muted">{p.detail}</td>
-                <td class="py-3 align-top text-muted">{p.platform.startsWith('Mobile') ? 'No' : 'Yes'}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-    <p class="mt-4 text-sm text-muted">
-      The official notice adds: make sure the device has sufficient space, use Wi-Fi, and remember that installed voice
-      packs change the space the download needs.
-    </p>
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="while-downloading">
@@ -124,80 +119,102 @@ const notice = sourceById('E01')!;
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="how-to">
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">How to pre-download on each platform</h2>
-    <div class="mt-6 grid gap-4 md:grid-cols-2">
-      {
-        preDownload.steps.map((s) => (
-          <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
-            <p class="text-sm font-bold uppercase tracking-wider text-muted">{s.platform}</p>
-            <ol class="mt-3 list-decimal space-y-2 pl-5 text-muted">
-              {s.steps.map((step) => (
-                <li>{step}</li>
-              ))}
-            </ol>
-          </div>
-        ))
-      }
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[34rem] text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-slate-700">
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Platform</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Steps</th>
+            <th scope="col" class="py-3 font-semibold text-heading">Play meanwhile</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            preDownload.steps.map((s) => (
+              <tr class="border-b border-gray-100 dark:border-slate-800">
+                <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
+                  {s.platform}
+                </th>
+                <td class="py-3 pr-4 align-top text-muted">
+                  <ol class="list-decimal space-y-1 pl-4">
+                    {s.steps.map((step) => (
+                      <li>{step}</li>
+                    ))}
+                  </ol>
+                </td>
+                <td class="py-3 align-top text-muted">
+                  {s.platform === 'Android' || s.platform === 'iOS' ? 'No' : 'Yes'}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     </div>
+    <p class="mt-4 text-sm text-muted">
+      The official notice adds: make sure the device has sufficient space, use Wi-Fi, and remember that installed voice
+      packs change the space the download needs.
+    </p>
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="compensation">
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
       Polychrome x300 server update compensation
     </h2>
-    <div class="mt-4 max-w-3xl space-y-4 text-lg text-muted">
-      <p>
-        The server update compensation is <strong class="text-heading">Polychrome x300</strong>, and it has three
-        conditions attached to it:
-      </p>
-      <ul class="list-disc space-y-2 pl-5">
-        <li>
-          <strong class="text-heading">Eligibility:</strong> you had to reach Inter-Knot Lv. 4 before 2026/10/21 06:00 (UTC+8).
-          Proxies below that level did not qualify.
-        </li>
-        <li>
-          <strong class="text-heading">Delivery:</strong> it is issued by in-game mail after the update completes.
-        </li>
-        <li>
-          <strong class="text-heading">Deadline:</strong> the mail has to be claimed before the end of Version 3.3, and the
-          mail itself expires after 30 days.
-        </li>
-      </ul>
-      <p>
-        A second, separate payment of Polychrome x300 covers the issue fixes. It has to be claimed by logging in before
-        2026/11/20 23:59 (UTC+8).
-      </p>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Eligibility</p>
+        <p class="mt-2 font-heading text-2xl font-bold text-heading">Inter-Knot Lv. 4</p>
+        <p class="mt-1 text-sm text-muted">Reached before 2026/10/21 06:00 (UTC+8). Lower levels did not qualify.</p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Delivery</p>
+        <p class="mt-2 font-heading text-2xl font-bold text-heading">Polychrome x300</p>
+        <p class="mt-1 text-sm text-muted">Issued by in-game mail after the update completes.</p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Deadline</p>
+        <p class="mt-2 font-heading text-2xl font-bold text-heading">End of 3.3</p>
+        <p class="mt-1 text-sm text-muted">
+          Claim the mail before the version ends; the mail itself expires after 30 days.
+        </p>
+      </div>
     </div>
+    <p class="mt-4 text-muted">
+      A second, separate payment of Polychrome x300 covers the issue fixes. Log in to claim it before
+      <strong class="text-heading">2026/11/20 23:59 (UTC+8)</strong>.
+    </p>
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="next-version">
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">The next version: what to do differently</h2>
-    <Features
-      tagline="Reusable checklist"
-      title="The 3.3 pre-download routine, ready for the next one"
-      subtitle="Every ZZZ version follows the same three-step pattern, and the notice usually arrives two days before maintenance."
-      items={[
-        {
-          title: 'Watch for the notice, not the trailer',
-          description:
-            'The Pre-Download & Update Notice carries the sizes, the window and the compensation rules. It is published separately from the trailer and the Special Program.',
-        },
-        {
-          title: 'Start the download early',
-          description:
-            'The window closes ten minutes before maintenance begins. On console the download may start on its own if storage is reserved, but it does not start before the notice is live.',
-        },
-        {
-          title: 'Check the compensation conditions early',
-          description:
-            'Inter-Knot Lv. 4 before the maintenance start is the eligibility line. Check it the day the notice appears, not on update day.',
-        },
-        {
-          title: 'Plan the mobile case separately',
-          description:
-            'Mobile is the only platform that cannot play during the pre-download, so the download has to finish before you plan to play.',
-        },
-      ]}
-    />
+    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {
+        [
+          {
+            title: 'Watch for the notice',
+            body: 'The Pre-Download & Update Notice carries the sizes, window and compensation rules. It is published separately from the trailer.',
+          },
+          {
+            title: 'Start early',
+            body: 'The window closes ten minutes before maintenance. On console it can auto-start if storage is reserved, but not before the notice is live.',
+          },
+          {
+            title: 'Check eligibility early',
+            body: 'Inter-Knot Lv. 4 before the maintenance start is the line. Check it the day the notice appears.',
+          },
+          {
+            title: 'Plan mobile separately',
+            body: 'Mobile is the only platform that cannot play during the pre-download, so the download has to finish first.',
+          },
+        ].map((f) => (
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+            <p class="text-base font-bold text-heading">{f.title}</p>
+            <p class="mt-2 text-sm text-muted">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">

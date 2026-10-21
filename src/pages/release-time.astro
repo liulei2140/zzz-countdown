@@ -4,13 +4,15 @@ import Layout from '~/layouts/PageLayout.astro';
 import Note from '~/components/widgets/Note.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import Features from '~/components/widgets/Features.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
 
 import LocalTime from '~/components/widgets/LocalTime.astro';
 
 import StructuredData from '~/components/common/StructuredData.astro';
 
 import { timeZones, faqs } from '~/data/zzz';
+
+import timezoneArt from '~/assets/images/timezone-art.jpg';
 
 const metadata = {
   title: 'ZZZ 3.3 Release Time in Every Time Zone (Maintenance Start & Expected Go-Live)',
@@ -40,15 +42,12 @@ const zoneLabel = (zone: string, date: Date) => {
 };
 
 const rows = timeZones.map((tz) => {
-  const maintenance = inZone(MAINTENANCE, tz.zone);
-  const launch = inZone(LAUNCH, tz.zone);
   const shift = tz.offset;
-  const diff = shift === 0 ? 'same as UTC+8' : `${shift > 0 ? '+' : ''}${shift} h vs UTC`;
   return {
     ...tz,
-    maintenance,
-    launch,
-    diff,
+    maintenance: inZone(MAINTENANCE, tz.zone),
+    launch: inZone(LAUNCH, tz.zone),
+    diff: shift === 0 ? 'same as UTC+8' : `${shift > 0 ? '+' : ''}${shift} h vs UTC`,
     abbreviation: zoneLabel(tz.zone, LAUNCH),
   };
 });
@@ -70,14 +69,13 @@ const faqSchema = {
   <section class="mx-auto max-w-7xl px-4 pt-12 sm:px-6">
     <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Zenless Zone Zero 3.3</p>
     <h1 class="mt-2 max-w-4xl text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
-      When does ZZZ 3.3 release? Maintenance start and go-live times by time zone
+      ZZZ 3.3 release time in every time zone
     </h1>
     <p class="mt-4 max-w-3xl text-xl text-muted">
-      The official notice gives one clock and one estimate: maintenance starts at
-      <strong class="text-heading">2026/10/21 06:00 (UTC+8)</strong> and
-      <strong class="text-heading">“will take five hours”</strong>. That puts the estimated go-live moment at
-      <strong class="text-heading">11:00 (UTC+8)</strong>, which is still October 20 for readers in North America — the
-      reason several sites print a different date than HoYoverse does.
+      One official clock, one estimate. Maintenance starts <strong class="text-heading">2026/10/21 06:00 (UTC+8)</strong
+      >
+      and the notice says it “will take five hours”, which puts the estimated go-live at
+      <strong class="text-heading">11:00 (UTC+8)</strong>.
     </p>
 
     <div class="mt-8 grid gap-4 md:grid-cols-3">
@@ -100,41 +98,23 @@ const faqSchema = {
     </div>
   </section>
 
-  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
-    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">The official schedule, word for word</h2>
-    <div class="mt-4 max-w-3xl space-y-4 text-lg text-muted">
-      <p>
-        From the
-        <a
-          class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
-          href="https://www.hoyolab.com/article/47130875"
-          target="_blank"
-          rel="noopener noreferrer">Pre-Download &amp; Update Notice</a
-        >:
-      </p>
-      <blockquote class="rounded-2xl border-l-4 border-primary/60 bg-gray-50 p-5 text-heading dark:bg-slate-800">
-        “2026/10/21 06:00 (UTC+8) : We estimate this will take five hours. For details on aspects such as new gameplay,
-        optimizations, bug fixes, and compensation, please look out for future version update info.”
-      </blockquote>
-      <p>
-        The Update Announcement repeats it and adds the end of the version: “Please note that Version 3.3 will run for
-        42 days, ending on 2026/12/02 06:00 (UTC+8).”
-      </p>
-      <p class="text-base text-muted">
-        There is no published go-live minute anywhere in the official feed, and the Steam news channel for the game has
-        no “servers are up” post either. Any site showing a precise second is showing its own estimate, not an
-        announcement.
-      </p>
-    </div>
+  <section class="mx-auto max-w-7xl px-4 mt-12 sm:px-6">
+    <SectionArt
+      src={timezoneArt.src}
+      alt="A stylized world clock grid with highlighted city markers on a deep blue map"
+      eyebrow="One instant, many clocks"
+      heading="The same moment, everywhere"
+      caption="Original artwork for this site."
+    />
   </section>
 
-  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="time-zones">
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
       Maintenance start and estimated go-live in 14 time zones
     </h2>
     <p class="mt-3 max-w-3xl text-lg text-muted">
-      Offsets are the ones in force on the 3.3 launch date. On that date the US is still on daylight saving time and
-      Europe is on summer time, which is exactly where fixed-offset tables go wrong.
+      Offsets are the ones in force on the launch date: the US is still on daylight saving time and Europe is on summer
+      time, which is exactly where fixed-offset tables go wrong.
     </p>
 
     <div class="mt-6 overflow-x-auto">
@@ -172,8 +152,7 @@ const faqSchema = {
     </div>
 
     <p class="mt-4 text-sm text-muted">
-      The server clock is UTC+8 in every row above: “server time” in an official ZZZ notice means the same thing as
-      “(UTC+8)”.
+      The server clock is UTC+8 in every row: “server time” in an official ZZZ notice means the same thing as “(UTC+8)”.
     </p>
   </section>
 
@@ -181,29 +160,28 @@ const faqSchema = {
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
       Why some sites say October 20 and others say October 21
     </h2>
-    <div class="mt-4 max-w-3xl space-y-4 text-lg text-muted">
-      <p>They are describing the same moment on different clocks, and one of them is mixing up two different events.</p>
-      <ul class="list-disc space-y-2 pl-5">
-        <li>
-          <strong class="text-heading">HoYoverse</strong> lists the update as <strong class="text-heading"
-            >October 21</strong
-          >, because that is the date on the UTC+8 server clock.
-        </li>
-        <li>
-          <strong class="text-heading">US-facing sites</strong> often print <strong class="text-heading"
-            >October 20</strong
-          >, because 2026-10-20 23:00 EDT is the same instant as 2026-10-21 11:00 UTC+8.
-        </li>
-        <li>
-          <strong class="text-heading">Maintenance start</strong> is a different event from
-          <strong class="text-heading">go-live</strong>: the update starts at 06:00 (UTC+8) and the servers come back
-          about five hours later. A page that prints a single “launch time” for both events is wrong on one of them.
-        </li>
-      </ul>
-      <p>
-        This site shows both moments separately everywhere, so a reader in California and a reader in Singapore are
-        looking at the same schedule.
-      </p>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">HoYoverse</p>
+        <p class="mt-2 text-sm text-muted">
+          Lists the update as <strong class="text-heading">October 21</strong>, because that is the date on the UTC+8
+          server clock.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">US-facing sites</p>
+        <p class="mt-2 text-sm text-muted">
+          Often print <strong class="text-heading">October 20</strong>, because 2026-10-20 23:00 EDT is the same instant
+          as 2026-10-21 11:00 UTC+8.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Two events, not one</p>
+        <p class="mt-2 text-sm text-muted">
+          Maintenance starts at 06:00 (UTC+8) and the servers return about five hours later. A page that prints one
+          “launch time” for both is wrong on one of them.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -229,31 +207,6 @@ const faqSchema = {
         </p>
       </div>
     </div>
-  </section>
-
-  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
-    <Features
-      tagline="Next"
-      title="Keep the rest of the 3.3 schedule close"
-      subtitle="The release time is one date in a version that has several. These pages cover the ones you are likely to need next."
-      items={[
-        {
-          title: 'Banner phase timers',
-          description: 'Every 3.3 Signal Search channel with a live countdown to its end.',
-          icon: 'tabler:repeat',
-        },
-        {
-          title: 'Pre-download sizes',
-          description: 'What each platform needs and when the window closed.',
-          icon: 'tabler:download',
-        },
-        {
-          title: 'Version end date',
-          description: 'When 3.3 closes and when the next version is expected.',
-          icon: 'tabler:calendar-event',
-        },
-      ]}
-    />
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">

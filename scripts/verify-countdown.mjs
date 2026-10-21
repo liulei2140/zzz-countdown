@@ -183,6 +183,67 @@ for (const t of release.localTimes) {
 const about = render('about/index.html');
 expect(about.errors.length === 0, `about page raised errors: ${about.errors.join('; ')}`);
 
+// --- layout and density regressions ----------------------------------------
+/**
+ * Reads the built page without the site chrome and reports the visible word
+ * count and the number of images. Used as a guard: pages must stay short and
+ * must carry artwork, so the site cannot quietly drift back to a wall of text.
+ */
+function measure(page) {
+  const html = readFileSync(resolve(root, 'dist', page), 'utf8');
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+  doc.querySelectorAll('script,style,noscript,header,footer,nav').forEach((el) => el.remove());
+  const text = (doc.body.textContent ?? '').replace(/\s+/g, ' ').trim();
+  return {
+    words: text ? text.split(' ').length : 0,
+    images: doc.querySelectorAll('img').length,
+    doc,
+  };
+}
+
+/** Pages that must carry at least one original image, and a word budget. */
+const density = [
+  { page: 'index.html', maxWords: 900, needsImage: true },
+  { page: 'banners/index.html', maxWords: 800, needsImage: true },
+  { page: 'release-time/index.html', maxWords: 760, needsImage: true },
+  { page: 'pre-download/index.html', maxWords: 760, needsImage: true },
+  { page: 'whats-new/index.html', maxWords: 800, needsImage: true },
+  { page: 'versions/index.html', maxWords: 340, needsImage: true },
+  { page: 'sources/index.html', maxWords: 560, needsImage: true },
+  { page: 'about/index.html', maxWords: 400, needsImage: true },
+  { page: 'contact/index.html', maxWords: 340, needsImage: true },
+  { page: 'privacy/index.html', maxWords: 300, needsImage: true },
+  { page: 'editorial-policy/index.html', maxWords: 430, needsImage: true },
+];
+
+console.log('\n=== density ===');
+for (const d of density) {
+  const m = measure(d.page);
+  console.log(`  ${d.page.padEnd(26)} ${String(m.words).padStart(4)} words  ${m.images} image(s)`);
+  expect(m.words <= d.maxWords, `${d.page} has ${m.words} words, over the ${d.maxWords} budget`);
+  if (d.needsImage) {
+    expect(m.images >= 1, `${d.page} has no image, it should carry artwork`);
+  }
+}
+
+// --- "The dates behind this update" must not leave a half-empty row ---------
+{
+  const { doc } = measure('whats-new/index.html');
+  const heading = [...doc.querySelectorAll('h2')].find((h) => h.textContent?.includes('The dates behind this update'));
+  expect(Boolean(heading), 'whats-new page is missing "The dates behind this update"');
+  const section = heading?.closest('section');
+  const grid = section?.querySelector('div[class*="grid"]');
+  const cards = grid ? [...grid.children] : [];
+  expect(Boolean(grid), 'the dates section has no grid to hold its cards');
+  expect(
+    grid?.className.includes('md:grid-cols-3'),
+    `the dates section grid should use three columns, got "${grid?.className}"`
+  );
+  expect(cards.length === 3, `the dates section should have 3 cards, found ${cards.length}`);
+  console.log(`  whats-new dates section: ${cards.length} cards in a 3-column grid`);
+}
+
 console.log('\n=== assertions ===');
 if (fail.length) {
   for (const f of fail) console.log(`  FAIL: ${f}`);

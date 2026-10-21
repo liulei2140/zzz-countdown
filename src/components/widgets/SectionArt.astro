@@ -1,0 +1,55 @@
+---
+/**
+ * A full-width artwork band with an optional caption.
+ *
+ * The artwork is original (generated for this site), so the pages get a
+ * visual anchor without borrowing the publisher's own key art.
+ */
+import Image from '~/components/common/Image.astro';
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  eyebrow?: string;
+  heading?: string;
+  /** 'wide' = 21:9 band, 'card' = rounded 4:3 block. */
+  shape?: 'wide' | 'card';
+  class?: string;
+}
+
+const { src, alt, caption, eyebrow, heading, shape = 'wide', class: className = '' } = Astro.props;
+---
+
+<figure class:list={['not-prose', className]}>
+  {
+    (eyebrow || heading) && (
+      <div class="mb-4">
+        {eyebrow && (
+          <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">{eyebrow}</p>
+        )}
+        {heading && <h2 class="mt-2 text-3xl font-bold tracking-tight text-heading md:text-4xl">{heading}</h2>}
+      </div>
+    )
+  }
+
+  <div class:list={['relative overflow-hidden', shape === 'wide' ? 'rounded-3xl' : 'rounded-2xl']}>
+    <Image
+      src={src}
+      alt={alt}
+      width={shape === 'wide' ? 1200 : 900}
+      height={shape === 'wide' ? 514 : 672}
+      widths={[640, 960, 1200]}
+      sizes="(max-width: 768px) 100vw, 1100px"
+      layout="constrained"
+      format="webp"
+      class="h-full w-full object-cover"
+    />
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent"
+    >
+    </div>
+  </div>
+
+  {caption && <figcaption class="mt-3 text-sm text-muted">{caption}</figcaption>}
+</figure>

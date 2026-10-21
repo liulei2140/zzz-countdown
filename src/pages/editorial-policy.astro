@@ -2,6 +2,9 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Note from '~/components/widgets/Note.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
+
+import recordsArt from '~/assets/images/records-art.jpg';
 
 const metadata = {
   title: 'Editorial Policy: How We Update Countdown Dates',
@@ -23,6 +26,16 @@ const metadata = {
     </p>
   </section>
 
+  <section class="mx-auto max-w-4xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={recordsArt.src}
+      alt="Stacked translucent archive drawers with glowing index tabs"
+      eyebrow="Rulebook"
+      heading="Announced, or labelled an estimate"
+      caption="Original artwork for this site."
+    />
+  </section>
+
   <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
     <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Update triggers</h2>
     <div class="mt-4 space-y-4 text-lg text-muted">
@@ -40,27 +53,34 @@ const metadata = {
 
   <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
     <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Estimates versus confirmed times</h2>
-    <div class="mt-4 space-y-4 text-lg text-muted">
-      <p>
-        A time is only presented as confirmed when an official announcement prints it. Everything else is marked as an
-        estimate and shows the reasoning. The current example:
-      </p>
-      <ul class="list-disc space-y-2 pl-5">
-        <li>
-          <strong class="text-heading">Confirmed:</strong> maintenance starts 2026/10/21 06:00 (UTC+8); Phase I channels close
-          2026/11/11 11:59 (server time); Version 3.3 ends 2026/12/02 06:00 (UTC+8).
-        </li>
-        <li>
-          <strong class="text-heading">Estimated:</strong> the go-live minute at 11:00 (UTC+8), which is the published maintenance
-          start plus the “about five hours” HoYoverse estimates; the Phase II banner end, until the Phase II notice is published;
-          the next version date, derived from the 42-day cadence.
-        </li>
-      </ul>
-      <p>
-        Estimated times are never presented with a countdown that implies more precision than exists. The estimated card
-        is labelled, and the sources page repeats the label.
-      </p>
+    <p class="mt-3 text-lg text-muted">
+      A time is only presented as confirmed when an official announcement prints it. Everything else is marked as an
+      estimate and shows the reasoning.
+    </p>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <div
+        class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-800/60 dark:bg-emerald-950/30"
+      >
+        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Confirmed</p>
+        <ul class="mt-3 space-y-2 text-sm text-muted">
+          <li>Maintenance starts 2026/10/21 06:00 (UTC+8)</li>
+          <li>Phase I channels close 2026/11/11 11:59 (server time)</li>
+          <li>Version 3.3 ends 2026/12/02 06:00 (UTC+8)</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-800/60 dark:bg-amber-950/30">
+        <p class="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">Estimated</p>
+        <ul class="mt-3 space-y-2 text-sm text-muted">
+          <li>Go-live at 11:00 (UTC+8) — maintenance start plus the “about five hours” HoYoverse quotes</li>
+          <li>The Phase II banner end, until the Phase II notice is published</li>
+          <li>The next version date, derived from the 42-day cadence</li>
+        </ul>
+      </div>
     </div>
+    <p class="mt-4 text-lg text-muted">
+      Estimated times never get a countdown that implies more precision than exists. The estimated card is labelled, and
+      the sources page repeats the label.
+    </p>
   </section>
 
   <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">

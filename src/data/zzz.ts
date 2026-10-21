@@ -456,15 +456,14 @@ export const newContent = {
       attribute: 'Fire - Anomaly',
       channel: 'Into the Flames of Life',
       blurb:
-        'Limited S-Rank Fire Anomaly Agent. Her damage is scaled by the Anomaly attribute, and her critical hits benefit from Anomaly boosts applied by allies.',
+        'Limited S-Rank Fire Anomaly Agent. Her damage scales with the Anomaly attribute, and ally Anomaly boosts raise her critical hits.',
     },
     {
       name: 'Severian',
       title: 'Severian Lowell',
       attribute: 'Wind - Attack',
       channel: 'Answers in the Wind',
-      blurb:
-        'Limited S-Rank Wind Attack Agent arriving in Phase II. He is the second half of the 3.3 story that the Special Program teased.',
+      blurb: 'Limited S-Rank Wind Attack Agent arriving in Phase II, and the second half of the 3.3 story.',
     },
   ],
   wEngines: [
@@ -497,27 +496,27 @@ export const newContent = {
   features: [
     {
       title: 'Mech combat',
-      body: 'Version 3.3 adds controllable combat mechs with a close-range and a long-range mode, the headline feature of the "Journey to the Sky" update.',
+      body: 'Controllable combat mechs with a close-range and a long-range mode — the headline feature of 3.3.',
     },
     {
       title: 'Agent Guides',
-      body: 'A new in-game Agent Guides feature explains upgrades and team compositions, with a Fairy Team Recommendation function that builds a lineup for you.',
+      body: 'A new in-game guide explains upgrades and team compositions, and builds a lineup for you.',
     },
     {
       title: 'Enigma of the Labyrinth',
-      body: 'A temporary Safe capacity increase now has its own in-game countdown timer. It expires at the end of Version 3.3 and resets with the 3.4 update.',
+      body: 'The temporary Safe capacity increase has its own in-game timer and expires with Version 3.3.',
     },
     {
       title: 'New events',
-      body: 'New Agent Trust events, the "Trails of the Hobbling Crow" event and new titles tied to the Zenless Zone Zero 2026 FES.',
+      body: 'New Agent Trust events, the "Trails of the Hobbling Crow" event and 2026 FES titles.',
     },
     {
       title: 'Limited Spookies',
-      body: "Boojee's Store sells limited Spookies, including the Proxy accessory Full Moon Homecoming. They are only available during Version 3.3.",
+      body: "Boojee's Store sells limited Spookies, including the Full Moon Homecoming accessory.",
     },
     {
       title: 'Notorious Hunt and Expert Challenge',
-      body: 'In some permanent combat modes your team is now evaluated by the number of Agents deployed and their upgrade progress, with a warning prompt when the team looks weak.',
+      body: 'Some permanent modes now score your team by Agents deployed and upgrade progress.',
     },
   ],
   store: [
@@ -562,12 +561,12 @@ export const faqs = {
     {
       title: 'Does the maintenance end time equal the moment the version goes live?',
       description:
-        'Almost, but not exactly. The official notice says maintenance starts at 2026/10/21 06:00 (UTC+8) and "will take five hours", so 11:00 (UTC+8) is our estimate of the go-live moment, not a published time. The moment the update finishes, login is restored.',
+        'Almost. The notice says maintenance starts 2026/10/21 06:00 (UTC+8) and "will take five hours", so 11:00 (UTC+8) is our estimate of go-live, not a published time.',
     },
     {
       title: 'Should I use EDT or EST right now?',
       description:
-        'EDT. On the 3.3 launch date the US is still on daylight saving time, so New York is UTC-4 and Los Angeles is UTC-7. This is exactly where most countdown pages go wrong: they print a fixed UTC-5 offset and quietly give you the wrong hour.',
+        'EDT. On the launch date the US is still on daylight saving time: New York is UTC-4, Los Angeles UTC-7. A page that prints a fixed UTC-5 offset gives you the wrong hour.',
     },
     {
       title: 'Is the countdown on my time or on server time?',
@@ -577,12 +576,12 @@ export const faqs = {
     {
       title: 'When does Phase 2 start?',
       description:
-        'The Phase I Signal Search channels run until 2026/11/11 11:59 (server time), so Phase II starts at 12:00 server time the same day. Severian and the Phase II reruns arrive with it.',
+        'Phase I runs until 2026/11/11 11:59 (server time), so Phase II starts at 12:00 the same day with Severian and the Phase II reruns.',
     },
     {
       title: 'When does Version 3.3 end?',
       description:
-        '2026/12/02 06:00 (UTC+8). The official update announcement states that Version 3.3 runs 42 days and ends at that time, which is also when the store discounts finish and the next version is expected.',
+        '2026/12/02 06:00 (UTC+8). The update announcement states 3.3 runs 42 days and ends then — the same moment the store discounts finish.',
     },
     {
       title: 'Can I play on mobile while the pre-download runs?',
@@ -609,17 +608,17 @@ export const faqs = {
     {
       title: 'Which time zone does HoYoverse use?',
       description:
-        'All official ZZZ notices are written in UTC+8, the same clock the game servers run on. "Server time" in an official notice therefore means UTC+8.',
+        'All official ZZZ notices are written in UTC+8, the same clock the game servers run on. "Server time" therefore means UTC+8.',
     },
     {
       title: 'Why is the launch shown as both October 20 and October 21?',
       description:
-        'The official date is October 21 on the UTC+8 server clock. In North America the same moment is October 20 at 23:00 EDT, which is why several English sites print October 20. Neither is wrong, they are just using different clocks.',
+        'The official date is October 21 on the UTC+8 server clock. In North America the same moment is October 20 at 23:00 EDT, which is why several English sites print October 20.',
     },
     {
       title: 'Does daylight saving time change the answer?',
       description:
-        'Not during Version 3.3. The US leaves daylight saving time in early November and the EU leaves it in late October, so by the Phase II window in November the offsets shift again. The Phase I and Phase II conversions on this page use the offsets in effect on those dates.',
+        'Not during Version 3.3. The US leaves daylight saving time in early November and the EU in late October, so the Phase II window in November shifts again.',
     },
     {
       title: 'Why does the maintenance start time differ from the go-live time?',
@@ -631,29 +630,29 @@ export const faqs = {
     {
       title: 'Does the guaranteed-signal counter carry over between the 3.3 channels?',
       description:
-        'Between Exclusive Channels, yes. The official Phase I notice states that the search count for guaranteed signals is cumulative across all Exclusive Channels, and that it is independent of other types of channels. Limited S-Rank Agents and W-Engines featured in those channels do not appear in the Star-Studded Cast Stable Channel.',
+        'Between Exclusive Channels, yes. The official Phase I notice states the guaranteed-signal count is cumulative across all Exclusive Channels, and independent of other channel types.',
     },
     {
       title: 'Why do different sites show the banner ending a day apart?',
       description:
-        'Usually a server-time versus local-date difference. The Phase I channels end at 2026/11/11 11:59 server time, which is still November 11 in UTC+8 but already late on November 10 for some readers in the Americas.',
+        'Usually a server-time versus local-date difference. The Phase I channels end 2026/11/11 11:59 server time, which is late on November 10 for some readers in the Americas.',
     },
     {
       title: 'Is Phase 2 confirmed?',
       description:
-        'The Phase II lineup and window were published in the 3.3 Intel Report after the Special Program on October 9. The exact Phase II end time is listed as an estimate on this page until the official Phase II notice is published.',
+        'The Phase II lineup and window were published in the 3.3 Intel Report on October 9. The exact end time is listed as an estimate until the official Phase II notice appears.',
     },
     {
       title: 'Should I pull in Phase I or save for Phase II?',
       description:
-        'That is a resource decision rather than a countdown fact, so this site does not make the call for you. What we can tell you is the deadline: Phase I closes at 2026/11/11 11:59 server time and Phase II closes at the end of the 3.3 banner cycle.',
+        'That is a resource decision, not a countdown fact. The deadline: Phase I closes 2026/11/11 11:59 server time, Phase II closes at the end of the 3.3 banner cycle.',
     },
   ],
   preDownload: [
     {
       title: 'How much space do I need?',
       description:
-        'About 6 GB on PC, 5 GB on mobile, 14 GB on PS5 and 21 GB on Xbox Series X|S. Installed voice packs change the number, and the official notice asks you to make sure the device has sufficient space and to use Wi-Fi.',
+        'About 6 GB on PC, 5 GB on mobile, 14 GB on PS5 and 21 GB on Xbox Series X|S. Installed voice packs change the number.',
     },
     {
       title: 'Can I keep playing during the download?',
@@ -663,7 +662,7 @@ export const faqs = {
     {
       title: 'What if I missed the pre-download window?',
       description:
-        'The 3.3 pre-download closed at 2026/10/21 05:50 (UTC+8), a few minutes before maintenance started. Every version ships the same pattern, so the practical answer for the next version is to start the download as soon as the notice appears.',
+        'The 3.3 pre-download closed 2026/10/21 05:50 (UTC+8). Every version ships the same pattern, so start the download as soon as the next notice appears.',
     },
     {
       title: 'Do I need a specific account level for the compensation?',

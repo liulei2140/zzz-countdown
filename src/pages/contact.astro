@@ -3,6 +3,9 @@ import Layout from '~/layouts/PageLayout.astro';
 
 import Note from '~/components/widgets/Note.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
+
+import recordsArt from '~/assets/images/records-art.jpg';
 
 const metadata = {
   title: 'Contact ZZZ Countdown: Report a Wrong Date or Request a Correction',
@@ -22,6 +25,16 @@ const metadata = {
       A date on this site that is wrong is a bug, and bugs get fixed. The fastest way to get one fixed is to point at
       the official announcement that says otherwise.
     </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={recordsArt.src}
+      alt="Stacked translucent archive drawers with glowing index tabs"
+      eyebrow="Corrections"
+      heading="Every fix gets logged"
+      caption="Original artwork for this site."
+    />
   </section>
 
   <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">

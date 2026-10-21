@@ -3,8 +3,11 @@ import Layout from '~/layouts/PageLayout.astro';
 
 import Note from '~/components/widgets/Note.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
 
 import { sources, milestones, SITE } from '~/data/zzz';
+
+import archiveArt from '~/assets/images/archive-art.jpg';
 
 const metadata = {
   title: 'Sources: Every ZZZ Update Date We Use and Where It Came From',
@@ -31,9 +34,18 @@ const kinds: Record<string, string> = {
     </h1>
     <p class="mt-4 text-xl text-muted">
       Every date on this site comes from an announcement published by HoYoverse. This page lists each one, what it
-      confirms, and when it was last read. Anything that is not printed in one of these posts is labelled an estimate on
-      the page where it appears.
+      confirms, and when it was last read. Anything not printed in one of these posts is labelled an estimate.
     </p>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={archiveArt.src}
+      alt="Translucent document panels linked by thin glowing lines"
+      eyebrow="Receipts"
+      heading="Every date links back to its post"
+      caption="Original artwork for this site."
+    />
   </section>
 
   <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
@@ -119,21 +131,28 @@ const kinds: Record<string, string> = {
     <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">
       What is an estimate, not an official time
     </h2>
-    <ul class="mt-4 list-disc space-y-3 pl-5 text-muted">
-      <li>
-        <strong class="text-heading">The go-live minute.</strong> HoYoverse published the maintenance start (2026/10/21 06:00
-        UTC+8) and said the update “will take five hours”. 11:00 UTC+8 is that estimate, and it is labelled as such wherever
-        it appears.
-      </li>
-      <li>
-        <strong class="text-heading">The Phase II banner end.</strong> Taken from the Intel Report and the community schedule
-        until the official Phase II notice is published.
-      </li>
-      <li>
-        <strong class="text-heading">The next version date.</strong> Expected around 2026/12/02 on the 42-day cadence. Not
-        announced.
-      </li>
-    </ul>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
+        <p class="mt-2 text-base font-bold text-heading">The go-live minute</p>
+        <p class="mt-2 text-sm text-muted">
+          Maintenance starts 2026/10/21 06:00 (UTC+8) and the update “will take five hours”. 11:00 UTC+8 is that
+          estimate, and it is labelled as such wherever it appears.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
+        <p class="mt-2 text-base font-bold text-heading">The Phase II banner end</p>
+        <p class="mt-2 text-sm text-muted">
+          Taken from the Intel Report and the community schedule until the official Phase II notice is published.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
+        <p class="mt-2 text-base font-bold text-heading">The next version date</p>
+        <p class="mt-2 text-sm text-muted">Expected around 2026/12/02 on the 42-day cadence. Not announced.</p>
+      </div>
+    </div>
   </section>
 
   <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">

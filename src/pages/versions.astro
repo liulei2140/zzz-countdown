@@ -3,9 +3,11 @@ import Layout from '~/layouts/PageLayout.astro';
 
 import Note from '~/components/widgets/Note.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import Features from '~/components/widgets/Features.astro';
+import SectionArt from '~/components/widgets/SectionArt.astro';
 
 import { versionHistory, sources, SITE } from '~/data/zzz';
+
+import cadenceArt from '~/assets/images/cadence-art.jpg';
 
 const metadata = {
   title: 'ZZZ Version History: Every Version Release and End Date (2026)',
@@ -22,10 +24,19 @@ const metadata = {
       Version history and release cadence
     </h1>
     <p class="mt-4 max-w-3xl text-xl text-muted">
-      Zenless Zone Zero ships a version roughly every six weeks, and each one runs for 42 days. That rhythm is stated in
-      the official update announcements, which is what makes the next version's date predictable — and what makes a
-      countdown page worth keeping after the update day itself.
+      Zenless Zone Zero ships a version roughly every six weeks, and each one runs for 42 days. That rhythm is printed
+      in the official update announcements, which is what makes the next date predictable.
     </p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6">
+    <SectionArt
+      src={cadenceArt.src}
+      alt="A repeating chain of glowing arc segments, one per version cycle"
+      eyebrow="Six-week rhythm"
+      heading="One cadence, version after version"
+      caption="Original artwork for this site."
+    />
   </section>
 
   <section class="mx-auto max-w-7xl px-4 mt-12 sm:px-6" id="cadence">
@@ -117,29 +128,28 @@ const metadata = {
 
   <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="how-we-verify">
     <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">How each date is verified</h2>
-    <div class="mt-6">
-      <Features
-        tagline="Method"
-        title="Only announced dates get a start and an end"
-        subtitle="A date on this site is either printed in an official announcement, or labelled as an estimate. Nothing is inferred silently."
-        items={[
-          {
-            title: 'Start and end from the update announcement',
-            description:
-              'Each version announcement states the update start time and the 42-day end time. Those are the only two dates treated as facts.',
-          },
-          {
-            title: 'Phase dates from the channel notice',
-            description:
-              'The Phase I notice gives the exact time the Signal Search channels close. Phase II dates are confirmed when the Phase II notice appears.',
-          },
-          {
-            title: 'Everything else is labelled',
-            description:
-              'The go-live minute, the Phase II end and the next version are marked as estimates on the page, with the reasoning shown.',
-          },
-        ]}
-      />
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-base font-bold text-heading">Start and end</p>
+        <p class="mt-2 text-sm text-muted">
+          Each version announcement states the update start and the 42-day end. Those are the only two dates treated as
+          facts.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-base font-bold text-heading">Phase dates</p>
+        <p class="mt-2 text-sm text-muted">
+          The Phase I notice gives the exact closing time of the Signal Search channels. Phase II is confirmed when its
+          notice appears.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-base font-bold text-heading">Everything else is labelled</p>
+        <p class="mt-2 text-sm text-muted">
+          The go-live minute, the Phase II end and the next version are marked as estimates on the page, with the
+          reasoning shown.
+        </p>
+      </div>
     </div>
   </section>
 

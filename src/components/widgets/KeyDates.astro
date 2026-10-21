@@ -65,8 +65,9 @@ const fmt = (iso: string, clock: 'server' | 'utc8') =>
                 href={m.source!.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                title={m.source!.title}
               >
-                {m.source!.id} · {m.source!.kind === 'pre-download' ? 'Pre-Download & Update Notice' : m.source!.title}
+                {m.source!.id}
               </a>
             </td>
           </tr>

@@ -30,6 +30,7 @@ const columnsClass = getColumnsClass(columns);
 // `image.aspect` decides the crop: square by default, 4/3, portrait, or the
 // natural height without cropping (`auto`).
 const { aspect = '1/1', ...imageProps } = typeof image === 'object' && image ? image : { src: '', alt: '' };
+const hasImage = Boolean(image);
 const aspectClass = {
   '4/3': 'aspect-[4/3] object-cover',
   '1/1': 'aspect-square object-cover',
@@ -62,8 +63,14 @@ const aspectSize = {
     }}
   />
   <div class="mx-auto max-w-7xl px-0 py-4 md:px-2">
-    <div class={`md:flex ${isReversed ? 'md:flex-row-reverse' : ''} md:gap-16`}>
-      <div class="md:basis-1/2 self-center">
+    {
+      /*
+        Without an image the two-column split would leave half the row empty,
+        so the content runs full width in that case.
+      */
+    }
+    <div class:list={['md:flex', { 'md:flex-row-reverse': isReversed && hasImage }, 'md:gap-16']}>
+      <div class:list={['self-center', { 'md:basis-1/2': hasImage }]}>
         {content && <div class="mb-12 text-lg dark:text-slate-400" set:html={content} />}
 
         {
@@ -116,9 +123,9 @@ const aspectSize = {
           )
         }
       </div>
-      <div class="mt-10 md:mt-0 md:basis-1/2">
-        {
-          image && (
+      {
+        hasImage && (
+          <div class="mt-10 md:mt-0 md:basis-1/2">
             <div class="relative m-auto max-w-4xl">
               {typeof image === 'string' ? (
                 <Fragment set:html={image} />
@@ -135,9 +142,9 @@ const aspectSize = {
                 />
               )}
             </div>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </WidgetWrapper>

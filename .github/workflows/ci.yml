@@ -46,8 +46,10 @@ jobs:
 
       - name: Report the deployment status
         if: always()
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          if [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
             echo "Cloudflare credentials present: the deploy job runs after this check." >> $GITHUB_STEP_SUMMARY
           else
             echo "CLOUDFLARE_API_TOKEN is not set, so the deploy job was skipped." >> $GITHUB_STEP_SUMMARY
@@ -57,13 +59,13 @@ jobs:
   deploy:
     name: Deploy to Cloudflare Pages
     needs: check
-    # Skipped until the repository has the Cloudflare credentials. The account
-    # ID is public; the API token has to be created in the Cloudflare dashboard.
-    if: >-
-      github.ref == 'refs/heads/main' &&
-      github.event_name != 'pull_request' &&
-      ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     runs-on: ubuntu-latest
+    # The `secrets` context is not available in a job-level `if`, so the
+    # credentials are exposed as job-level environment variables and the
+    # deploy step checks them there.
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,8 +85,15 @@ jobs:
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ env.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=zzz-countdown --branch=main
+
+      - name: Report that the deploy was skipped
+        if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''
+        run: |
+          echo "Cloudflare credentials are not configured, so nothing was deployed." >> $GITHUB_STEP_SUMMARY
+          echo "See the Deployment section of README.md for the two secrets and the commands to add them." >> $GITHUB_STEP_SUMMARY

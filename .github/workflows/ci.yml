@@ -44,10 +44,25 @@ jobs:
       - name: Verify the built countdown
         run: npm run verify
 
+      - name: Report the deployment status
+        if: always()
+        run: |
+          if [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "Cloudflare credentials present: the deploy job runs after this check." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "CLOUDFLARE_API_TOKEN is not set, so the deploy job was skipped." >> $GITHUB_STEP_SUMMARY
+            echo "Create a token with 'Cloudflare Pages: Edit' and 'Workers Scripts: Edit' for this account, then add it as the repository secret CLOUDFLARE_API_TOKEN." >> $GITHUB_STEP_SUMMARY
+          fi
+
   deploy:
     name: Deploy to Cloudflare Pages
     needs: check
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # Skipped until the repository has the Cloudflare credentials. The account
+    # ID is public; the API token has to be created in the Cloudflare dashboard.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.event_name != 'pull_request' &&
+      ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

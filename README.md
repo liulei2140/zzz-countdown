@@ -68,6 +68,35 @@ The site is rebuilt for every version (roughly every six weeks):
 4. Run `npm run build && npm run verify`.
 5. Move the previous version to an archive page when the next version is announced.
 
+## Deployment to Cloudflare Pages
+
+The site is live at <https://zzz-countdown.pages.dev> (project `zzz-countdown`,
+production branch `main`).
+
+Deploy from a local machine:
+
+```bash
+SITE_URL=https://zzz-countdown.pages.dev npm run build
+npx wrangler pages deploy dist --project-name=zzz-countdown --branch=main
+```
+
+Deploy from GitHub Actions: `.github/workflows/ci.yml` builds, checks and
+verifies on every push, then deploys to Cloudflare Pages. The deploy job needs
+two repository secrets:
+
+| Secret                  | Value                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `CLOUDFLARE_ACCOUNT_ID` | `f347ea77ea0eb80226457a78b20baf3a`                                                                                         |
+| `CLOUDFLARE_API_TOKEN`  | a token created in the Cloudflare dashboard with **Cloudflare Pages: Edit** and **Workers Scripts: Edit** for this account |
+
+Until the token is added, the deploy job is skipped and the check job reports
+it in the run summary — the build itself is unaffected.
+
+```bash
+gh secret set CLOUDFLARE_API_TOKEN --repo liulei2140/zzz-countdown
+gh secret set CLOUDFLARE_ACCOUNT_ID --repo liulei2140/zzz-countdown --body f347ea77ea0eb80226457a78b20baf3a
+```
+
 ## Notes
 
 - The site is an independent fan project and is not affiliated with HoYoverse.

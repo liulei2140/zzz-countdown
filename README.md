@@ -163,7 +163,9 @@ host. `npm run verify` asserts that those five agree with each other and that
 no host from an earlier domain is left behind.
 
 The Pages host `zzz-countdown.pages.dev` stays reachable as a fallback, but it
-redirects to the canonical host. `public/_redirects` holds the rules:
+redirects to the canonical host. `scripts/write-redirects.mjs` writes
+`public/_redirects` on every build, because the right rules depend on which
+host is canonical:
 
 ```
 https://zzz-countdown.pages.dev/* https://zzzcountdown.space/:splat 301
@@ -171,7 +173,11 @@ https://www.zzzcountdown.space/* https://zzzcountdown.space/:splat 301
 ```
 
 The apex is deliberately not in that list — redirecting the canonical host to
-itself would be a loop. `npm run verify` checks both.
+itself would be a loop. While the custom domain is still being pointed at
+Cloudflare and the canonical host is still the Pages host, the script writes
+no rules at all, because a redirect to a host that does not resolve yet would
+send every visitor nowhere. `npm run verify` checks the rules against the
+built site.
 
 ## Analytics
 

@@ -378,9 +378,16 @@ console.log('\n=== domain ===');
     expect(host === expectedHost, `${where} points at ${host}, expected ${expectedHost}`);
   }
 
-  // A leftover host from an earlier domain would split the site's signals.
-  for (const stale of ['zzz-countdown.pages.dev', 'zzzcountdown.site']) {
-    expect(!home.includes(stale), `the built page still references the old host "${stale}"`);
+  // Third-party links (the announcements this site cites, the analytics host)
+  // are expected. A host of *this* site left over from an earlier domain is
+  // not, so only the site's own names are checked.
+  const ownHosts = new Set([expectedHost, 'zzz-countdown.pages.dev', 'zzzcountdown.site']);
+  const pageHosts = new Set();
+  for (const match of home.matchAll(/https?:\/\/([a-z0-9.-]+)(?::\d+)?/gi)) pageHosts.add(match[1]);
+  const named = [...pageHosts].filter((host) => ownHosts.has(host));
+  console.log(`  site hosts in the built page: ${named.join(', ') || '(none)'}`);
+  for (const host of named) {
+    expect(host === expectedHost, `the built page names the site's own host "${host}", expected ${expectedHost}`);
   }
 
   // The redirects have to point at the canonical host, and the canonical host
@@ -390,14 +397,21 @@ console.log('\n=== domain ===');
   console.log('  redirects:');
   for (const rule of rules) {
     console.log(`    ${rule}`);
-    const target = rule.split(/\s+/)[1];
+    const [source, target] = rule.split(/\s+/);
     expect(target?.startsWith(`https://${expectedHost}/`), `the redirect target ${target} is not on ${expectedHost}`);
-    expect(!rule.startsWith(`https://${expectedHost}/`), `the canonical host redirects to itself: ${rule}`);
+    expect(!source?.startsWith(`https://${expectedHost}/`), `the canonical host redirects to itself: ${rule}`);
   }
-  expect(
-    redirects.includes('zzz-countdown.pages.dev') && redirects.includes('www.'),
-    'the redirects do not cover the Pages host and the www subdomain'
-  );
+  // The Pages host and the www subdomain are covered once the custom domain
+  // is the canonical one. Before that there is nothing to redirect, because
+  // the custom domain does not resolve yet.
+  if (expectedHost === 'zzzcountdown.space') {
+    expect(
+      redirects.includes('zzz-countdown.pages.dev') && redirects.includes('www.'),
+      'the redirects do not cover the Pages host and the www subdomain'
+    );
+  } else {
+    expect(rules.length === 0, `no redirect should exist while the canonical host is ${expectedHost}`);
+  }
 }
 
 console.log('\n=== assertions ===');

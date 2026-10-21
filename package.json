@@ -12,11 +12,12 @@
     "start": "astro dev",
     "og": "node scripts/og-image.mjs",
     "favicons": "node scripts/build-favicons.mjs",
-    "build": "node scripts/set-site-url.mjs && npm run og && npm run favicons && astro build",
+    "build": "node scripts/set-site-url.mjs && npm run og && npm run favicons && npm run redirects && astro build",
     "preview": "astro preview",
     "verify": "node scripts/verify-countdown.mjs && node scripts/check-links.mjs",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "redirects": "node scripts/write-redirects.mjs"
   },
   "dependencies": {
     "@astro-community/astro-embed-twitter": "^0.5.11",

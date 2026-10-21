@@ -1,4 +1,0 @@
-# Redirect the Pages host and the www subdomain to the canonical host.
-# The apex (zzzcountdown.space) is left alone, so it never redirects to itself.
-https://zzz-countdown.pages.dev/* https://zzzcountdown.space/:splat 301
-https://www.zzzcountdown.space/* https://zzzcountdown.space/:splat 301

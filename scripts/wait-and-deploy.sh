@@ -6,16 +6,20 @@
 # current host, because a canonical link pointing at an unreachable address
 # is worse than no change at all.
 #
+# A 200 on the canonical host means Cloudflare has both the custom domain
+# bound to the project and the certificate issued, which is exactly the
+# moment the switchover is safe.
+#
 # Run: bash scripts/wait-and-deploy.sh
 set -uo pipefail
 
 SITE_DIR="/home/liulei/personal-knowledge/new-keywords/2026-10-21-zzz-3-3-countdown/site"
 CANONICAL="https://zzzcountdown.space"
-DEADLINE=$((SECONDS + 45 * 60))
+DEADLINE=$((SECONDS + 55 * 60))
 
 cd "$SITE_DIR" || exit 1
 
-echo "[wait] polling $CANONICAL every 20s (up to 45 minutes)"
+echo "[wait] polling $CANONICAL every 20s (up to 55 minutes)"
 
 while [ $SECONDS -lt $DEADLINE ]; do
   code=$(curl -s -o /dev/null -w "%{http_code}" -m 12 "$CANONICAL/" 2>/dev/null)
@@ -44,8 +48,9 @@ while [ $SECONDS -lt $DEADLINE ]; do
     for path in / /banners /whats-new /sitemap.xml /robots.txt; do
       echo "[wait]   $path -> $(curl -s -o /dev/null -w '%{http_code}' -m 12 "$CANONICAL$path")"
     done
-    echo "[wait]   canonical: $(curl -s -m 12 "$CANONICAL/" | grep -o 'rel="canonical"[^>]*' | head -1)"
+    echo "[wait]   canonical: $(curl -s -m 12 "$CANONICAL/" | grep -o 'href="[^"]*" rel="canonical"' | head -1)"
     echo "[wait]   ga4: $(curl -s -m 12 "$CANONICAL/" | grep -o 'gtag/js?id=[A-Za-z0-9-]*' | head -1)"
+    echo "[wait]   sitemap host: $(curl -s -m 12 "$CANONICAL/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | head -1)"
     echo "[wait]   pages.dev -> $(curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}' -m 12 'https://zzz-countdown.pages.dev/')"
     echo "[wait]   www -> $(curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}' -m 12 'https://www.zzzcountdown.space/')"
     exit 0
@@ -55,5 +60,5 @@ while [ $SECONDS -lt $DEADLINE ]; do
   sleep 20
 done
 
-echo "[wait] timed out after 45 minutes without the domain resolving"
+echo "[wait] timed out after 55 minutes without the domain resolving"
 exit 1

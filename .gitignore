@@ -28,3 +28,11 @@ pnpm-workspace.yaml
 .astro
 # wrangler local state
 .wrangler/
+
+# generated favicon raster files (scripts/build-favicons.mjs rebuilds them
+# from src/assets/favicons/favicon.svg on every build)
+src/assets/favicons/icon-32.png
+src/assets/favicons/icon-192.png
+src/assets/favicons/icon-512.png
+src/assets/favicons/apple-touch-icon.png
+public/favicon.ico

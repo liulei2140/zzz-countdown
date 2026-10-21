@@ -14,6 +14,7 @@ import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
 
 import astrowind from './vendor/integration';
+import { sitemapAlias } from './src/integrations/sitemap-alias';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter';
 
@@ -96,6 +97,9 @@ export default defineConfig({
     astrowind({
       config: './src/config.yaml',
     }),
+
+    // Publishes /sitemap.xml next to the sharded sitemap index.
+    sitemapAlias(),
   ],
 
   image: {

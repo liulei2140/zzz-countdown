@@ -12,7 +12,7 @@
  *
  * Run: node scripts/verify-countdown.mjs
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
@@ -240,6 +240,81 @@ for (const d of density) {
   );
   expect(cards.length === 3, `the dates section should have 3 cards, found ${cards.length}`);
   console.log(`  whats-new dates section: ${cards.length} cards in a 3-column grid`);
+}
+
+// --- sitemap ---------------------------------------------------------------
+// `/sitemap.xml` is the path people and tooling try first. It must exist and
+// list exactly the URLs the sharded sitemap index lists.
+console.log('\n=== sitemap ===');
+{
+  const aliasPath = resolve(root, 'dist/sitemap.xml');
+  expect(existsSync(aliasPath), 'dist/sitemap.xml is missing');
+
+  if (existsSync(aliasPath)) {
+    const alias = readFileSync(aliasPath, 'utf8');
+    const aliasUrls = [...alias.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+
+    const shard = readFileSync(resolve(root, 'dist/sitemap-0.xml'), 'utf8');
+    const shardUrls = [...shard.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+
+    console.log(`  /sitemap.xml lists ${aliasUrls.length} URLs`);
+    expect(
+      aliasUrls.length === shardUrls.length,
+      `sitemap.xml lists ${aliasUrls.length} URLs, the shard lists ${shardUrls.length}`
+    );
+    expect(aliasUrls.join('|') === shardUrls.join('|'), 'sitemap.xml and sitemap-0.xml list different URLs');
+    for (const url of shardUrls) {
+      expect(aliasUrls.includes(url), `sitemap.xml is missing ${url}`);
+    }
+    expect(
+      shardUrls.some((url) => new URL(url).pathname === '/'),
+      'sitemap.xml does not list the home page'
+    );
+    expect(
+      alias.startsWith('<?xml') && alias.includes('<urlset') && alias.trim().endsWith('</urlset>'),
+      'sitemap.xml is not a well-formed urlset document'
+    );
+  }
+
+  // robots.txt must point crawlers at a sitemap that exists.
+  const robots = readFileSync(resolve(root, 'dist/robots.txt'), 'utf8');
+  const sitemapLine = robots.match(/^Sitemap:\s*(\S+)$/m)?.[1];
+  console.log(`  robots.txt -> ${sitemapLine ?? '(no Sitemap line)'}`);
+  expect(Boolean(sitemapLine), 'robots.txt has no Sitemap line');
+  expect(sitemapLine?.endsWith('/sitemap.xml'), `robots.txt should advertise /sitemap.xml, got "${sitemapLine}"`);
+}
+
+// --- favicon ---------------------------------------------------------------
+// The site icon must be the countdown mark, not the template's clock.
+console.log('\n=== favicon ===');
+{
+  const home = readFileSync(resolve(root, 'dist/index.html'), 'utf8');
+  // The HTML minifier reorders attributes, so match the tag, not a fixed
+  // attribute sequence.
+  const svgTag = home.match(/<link[^>]*type="image\/svg\+xml"[^>]*>/)?.[0];
+  const svgHref = svgTag?.match(/href="([^"]+)"/)?.[1];
+  console.log(`  svg icon: ${svgHref ?? '(missing)'}`);
+  expect(Boolean(svgHref), 'the home page has no SVG favicon link');
+
+  if (svgHref) {
+    const svgPath = resolve(root, 'dist', svgHref.replace(/^\//, ''));
+    expect(existsSync(svgPath), `the SVG favicon ${svgHref} is not in the build output`);
+    if (existsSync(svgPath)) {
+      const svg = readFileSync(svgPath, 'utf8');
+      expect(
+        svg.includes('stroke-dasharray') && svg.includes('url(#ring)'),
+        'the SVG favicon is not the countdown mark (missing ring)'
+      );
+      expect(!/clock|#4f9cff/i.test(svg), 'the SVG favicon still looks like the template clock');
+    }
+  }
+
+  for (const size of ['32x32', '192x192', '512x512']) {
+    expect(home.includes(`sizes="${size}"`), `the home page has no ${size} PNG favicon fallback`);
+  }
+  expect(home.includes('rel="apple-touch-icon"'), 'the home page has no apple-touch icon');
+  expect(/<meta[^>]*name="theme-color"[^>]*>/.test(home), 'the home page has no theme-color meta tag');
+  expect(existsSync(resolve(root, 'dist/favicon.ico')), 'dist/favicon.ico is missing');
 }
 
 console.log('\n=== assertions ===');

@@ -27,15 +27,31 @@ npm run preview   # serve the built site
 npm run verify    # DOM test of the built countdown behaviour + density + link checks
 ```
 
-`npm run build` runs three steps in order:
+`npm run build` runs four steps in order:
 
 1. `npm run og` regenerates the Open Graph card (`src/assets/images/og-zzz-3-3.png`) from `scripts/og-image.mjs`.
 2. `node scripts/set-site-url.mjs` rewrites the `site:` field in `src/config.yaml` from the `SITE_URL` environment variable. Without it the placeholder domain is kept.
-3. `astro build` produces the static site in `dist/`.
+3. `npm run favicons` rasterises `src/assets/favicons/favicon.svg` into the PNG and ICO fallbacks.
+4. `astro build` produces the static site in `dist/`.
 
 ```bash
 SITE_URL=https://your-domain.example npm run build
 ```
+
+## Site icon and sitemap
+
+`src/assets/favicons/favicon.svg` is the site icon: a dark plate, an orange
+countdown ring and a cut white Z. It is the only hand-authored file in that
+folder — `scripts/build-favicons.mjs` renders it into `icon-32.png`,
+`icon-192.png`, `icon-512.png`, `apple-touch-icon.png` (square, because iOS
+applies its own mask) and `public/favicon.ico`. Those outputs are generated on
+every build and are not tracked in git.
+
+`@astrojs/sitemap` writes a sharded index (`sitemap-index.xml` plus
+`sitemap-0.xml`). `src/integrations/sitemap-alias.ts` merges the shards into a
+plain `/sitemap.xml` as well and points `robots.txt` at it, so the path people
+and tooling try first resolves instead of returning 404. `npm run verify`
+asserts that the alias and the shard list the same URLs.
 
 ## How the countdown works
 
@@ -65,6 +81,10 @@ text:
 - **artwork** — every content page must render at least one image;
 - **`/whats-new` grid** — the “The dates behind this update” block must be three
   cards in a three-column grid, so it can never leave half a row empty;
+- **sitemap** — `/sitemap.xml` must exist and list exactly the URLs the sharded
+  sitemap lists, and `robots.txt` must advertise it;
+- **site icon** — the SVG icon in the build must be the countdown mark, with the
+  PNG and ICO fallbacks present, so the template’s clock can never come back;
 - **internal links** — `scripts/check-links.mjs` walks `dist/` and fails on any
   link that does not resolve to a built route.
 

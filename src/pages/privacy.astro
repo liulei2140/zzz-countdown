@@ -1,0 +1,85 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+
+const metadata = {
+  title: 'Privacy Policy',
+  description:
+    'What ZZZ Countdown collects, which cookies the site uses, and how advertising and analytics are handled.',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-4xl px-4 pt-12 sm:px-6">
+    <h1 class="text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">Privacy policy</h1>
+    <p class="mt-4 text-xl text-muted">
+      This site is a static set of pages with timers on them. It has no accounts, no comment system and no database of
+      visitors.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">What we collect</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        We do not ask for names, email addresses or any other detail that identifies you. The countdown timers run
+        entirely in your browser: your time zone is read from your device to show local times, and nothing about that is
+        sent to us or stored.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Cookies and advertising</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        The site may display advertising, and advertising networks commonly use cookies or similar technologies to serve
+        and measure ads. If advertising is enabled, this section is updated to name the network and link to its own
+        privacy policy before the site goes live.
+      </p>
+      <p>We do not sell personal data and we do not build profiles of visitors for our own purposes.</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Analytics</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        No analytics service is currently running on this site. If one is added later, this page is updated with the
+        provider, what it measures and how long the data is kept, and an opt-out link.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Third-party links</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        Pages here link to HoYoverse announcements, the official press release, the Steam news feed and community
+        resources. Those sites have their own privacy practices, which this policy does not cover.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Contact</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        Questions about this policy can go to the
+        <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/contact"
+          >contact page</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="info"
+      title="Last updated"
+      description="October 21, 2026. This page is updated whenever the site's data practices change."
+    />
+  </section>
+</Layout>

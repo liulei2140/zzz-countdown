@@ -1,0 +1,54 @@
+---
+/**
+ * Shows a timestamp in the visitor's own time zone.
+ *
+ * The server-rendered fallback is the UTC+8 (server) time, which is the
+ * clock HoYoverse uses in every notice. The script then replaces it with the
+ * browser's local time, so no arithmetic is needed on the reader's side.
+ */
+interface Props {
+  iso: string;
+  label?: string;
+}
+
+const { iso, label } = Astro.props;
+
+const serverTime = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'Asia/Shanghai',
+}).format(new Date(iso));
+---
+
+<span data-local-time-iso={iso} data-local-time-label={label}>
+  {serverTime} (UTC+8)
+</span>
+
+<script>
+  const render = () => {
+    document.querySelectorAll<HTMLElement>('[data-local-time-iso]').forEach((el) => {
+      const iso = el.dataset.localTimeIso;
+      if (!iso) return;
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return;
+      const formatted = new Intl.DateTimeFormat('en-GB', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }).format(d);
+      let zone = 'your time';
+      try {
+        zone =
+          new Intl.DateTimeFormat('en-GB', { timeZoneName: 'short' })
+            .formatToParts(d)
+            .find((p) => p.type === 'timeZoneName')?.value ?? zone;
+      } catch {
+        /* keep the fallback label */
+      }
+      const label = el.dataset.localTimeLabel;
+      el.textContent = label ? `${label}: ${formatted} (${zone})` : `${formatted} (${zone})`;
+    });
+  };
+
+  render();
+  document.addEventListener('astro:page-load', render);
+</script>

@@ -1,0 +1,180 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Features from '~/components/widgets/Features.astro';
+
+import { versionHistory, sources, SITE } from '~/data/zzz';
+
+const metadata = {
+  title: 'ZZZ Version History: Every Version Release and End Date (2026)',
+  description:
+    'Zenless Zone Zero version dates since launch — every version start and end date in UTC+8, the 42-day cadence behind them, and when the next version is expected.',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-7xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Zenless Zone Zero</p>
+    <h1 class="mt-2 max-w-4xl text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      Version history and release cadence
+    </h1>
+    <p class="mt-4 max-w-3xl text-xl text-muted">
+      Zenless Zone Zero ships a version roughly every six weeks, and each one runs for 42 days. That rhythm is stated in
+      the official update announcements, which is what makes the next version's date predictable — and what makes a
+      countdown page worth keeping after the update day itself.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-12 sm:px-6" id="cadence">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">How long each ZZZ version lasts</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Version length</p>
+        <p class="mt-2 font-heading text-3xl font-bold text-heading">42 days</p>
+        <p class="mt-2 text-sm text-muted">Stated in the update announcement of each version, including 3.2 and 3.3.</p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Banner phases</p>
+        <p class="mt-2 font-heading text-3xl font-bold text-heading">2 per version</p>
+        <p class="mt-2 text-sm text-muted">
+          Roughly three weeks each. The Phase I channels close at 11:59 server time on the switch day.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Current version</p>
+        <p class="mt-2 font-heading text-3xl font-bold text-heading">3.3</p>
+        <p class="mt-2 text-sm text-muted">“Journey to the Sky”, running from October 21 to December 2, 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="versions">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">Version dates</h2>
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[38rem] text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-slate-700">
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Version</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Title</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Start</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">End</th>
+            <th scope="col" class="py-3 font-semibold text-heading">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            versionHistory.map((v) => (
+              <tr class="border-b border-gray-100 dark:border-slate-800">
+                <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
+                  {v.version}
+                </th>
+                <td class="py-3 pr-4 align-top text-muted">{v.title}</td>
+                <td class="py-3 pr-4 align-top text-muted">{v.start}</td>
+                <td class="py-3 pr-4 align-top text-muted">{v.end}</td>
+                <td class="py-3 align-top text-muted">
+                  {v.sourceId && (
+                    <a
+                      class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
+                      href={sources.find((s) => s.id === v.sourceId)!.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {v.sourceId}
+                    </a>
+                  )}
+                </td>
+              </tr>
+            ))
+          }
+          <tr class="border-b border-gray-100 dark:border-slate-800">
+            <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">3.4</th>
+            <td class="py-3 pr-4 align-top text-muted">Not announced</td>
+            <td class="py-3 pr-4 align-top text-muted">Expected around 2026-12-02</td>
+            <td class="py-3 pr-4 align-top text-muted">—</td>
+            <td class="py-3 align-top text-muted">
+              <span
+                class="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200"
+              >
+                estimate
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6">
+      <Note
+        variant="warning"
+        title="The next version date is a calculation, not an announcement."
+        description="3.3 ends at 2026/12/02 06:00 (UTC+8) on the 42-day cadence, so 3.4 is expected around the same moment. The countdown page for 3.4 goes live when HoYoverse publishes the announcement, not before."
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="how-we-verify">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">How each date is verified</h2>
+    <div class="mt-6">
+      <Features
+        tagline="Method"
+        title="Only announced dates get a start and an end"
+        subtitle="A date on this site is either printed in an official announcement, or labelled as an estimate. Nothing is inferred silently."
+        items={[
+          {
+            title: 'Start and end from the update announcement',
+            description:
+              'Each version announcement states the update start time and the 42-day end time. Those are the only two dates treated as facts.',
+          },
+          {
+            title: 'Phase dates from the channel notice',
+            description:
+              'The Phase I notice gives the exact time the Signal Search channels close. Phase II dates are confirmed when the Phase II notice appears.',
+          },
+          {
+            title: 'Everything else is labelled',
+            description:
+              'The go-live minute, the Phase II end and the next version are marked as estimates on the page, with the reasoning shown.',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="info"
+      title="Verification log"
+      description={`All dates were checked against the official announcements on ${SITE.lastChecked}. The full list with links is on the sources page.`}
+    />
+    <a
+      class="mt-4 inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+      href="/sources"
+    >
+      All sources and the verification log
+    </a>
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Current version countdown',
+        href: '/',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'Banner phase timers', href: '/banners' },
+    ]}
+  >
+    <Fragment slot="title">
+      Version 3.3 runs<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">until December 2</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      The countdown page keeps running after launch day: the Phase I and Phase II switches are still ahead.
+    </Fragment>
+  </CallToAction>
+</Layout>

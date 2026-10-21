@@ -1,0 +1,77 @@
+---
+/**
+ * Table of every dated milestone in the 3.3 cycle, each row linked to the
+ * official announcement that confirms it. Estimates are labelled as such.
+ */
+import { milestones, sourceById } from '~/data/zzz';
+
+interface Props {
+  id?: string;
+  /** Milestone ids to show; defaults to all of them. */
+  only?: string[];
+  title?: string;
+}
+
+const { id, only, title } = Astro.props;
+
+const rows = (only ? milestones.filter((m) => only.includes(m.id)) : milestones).map((m) => ({
+  ...m,
+  source: sourceById(m.sourceId),
+}));
+
+const fmt = (iso: string, clock: 'server' | 'utc8') =>
+  new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Shanghai',
+  }).format(new Date(iso)) + (clock === 'server' ? ' (server time)' : ' (UTC+8)');
+---
+
+<div class="not-prose overflow-x-auto">
+  {
+    title && (
+      <h3 id={id} class="mb-4 text-2xl font-bold tracking-tight dark:text-white">
+        {title}
+      </h3>
+    )
+  }
+  <table class="w-full min-w-[42rem] text-left text-sm">
+    <thead>
+      <tr class="border-b border-gray-200 dark:border-slate-700">
+        <th scope="col" class="py-3 pr-4 font-semibold text-heading">Event</th>
+        <th scope="col" class="py-3 pr-4 font-semibold text-heading">Date and time</th>
+        <th scope="col" class="py-3 pr-4 font-semibold text-heading">Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((m) => (
+          <tr class="border-b border-gray-100 dark:border-slate-800">
+            <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
+              {m.label}
+              {m.estimated && (
+                <span class="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">
+                  estimate
+                </span>
+              )}
+              <span class="mt-1 block text-xs font-normal text-muted">{m.note}</span>
+            </th>
+            <td class="py-3 pr-4 align-top text-muted">
+              <time datetime={m.at}>{fmt(m.at, m.clock)}</time>
+            </td>
+            <td class="py-3 align-top">
+              <a
+                class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
+                href={m.source!.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {m.source!.id} · {m.source!.kind === 'pre-download' ? 'Pre-Download & Update Notice' : m.source!.title}
+              </a>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,113 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+
+const metadata = {
+  title: 'Editorial Policy: How We Update Countdown Dates',
+  description:
+    'How ZZZ Countdown decides what a countdown shows, how quickly corrections are made, and how estimated times are labelled against official announcements.',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-4xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Editorial policy</p>
+    <h1 class="mt-2 text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      How we update countdown dates
+    </h1>
+    <p class="mt-4 text-xl text-muted">
+      A countdown page is only worth visiting if the number on it can be trusted. This is the rulebook that keeps that
+      true.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Update triggers</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        A page is updated when HoYoverse publishes something, not when a community theory appears. The announcements
+        that trigger an update are the pre-download and update notice, the update announcement, the phase channel
+        notices, the Intel Report, the store notice and the Special Program post.
+      </p>
+      <p>
+        When a new version is announced, the countdown page, the release time page, the banner page, the pre-download
+        page and the content page are rewritten for that version, and the previous version moves to the archive.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Estimates versus confirmed times</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        A time is only presented as confirmed when an official announcement prints it. Everything else is marked as an
+        estimate and shows the reasoning. The current example:
+      </p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li>
+          <strong class="text-heading">Confirmed:</strong> maintenance starts 2026/10/21 06:00 (UTC+8); Phase I channels close
+          2026/11/11 11:59 (server time); Version 3.3 ends 2026/12/02 06:00 (UTC+8).
+        </li>
+        <li>
+          <strong class="text-heading">Estimated:</strong> the go-live minute at 11:00 (UTC+8), which is the published maintenance
+          start plus the “about five hours” HoYoverse estimates; the Phase II banner end, until the Phase II notice is published;
+          the next version date, derived from the 42-day cadence.
+        </li>
+      </ul>
+      <p>
+        Estimated times are never presented with a countdown that implies more precision than exists. The estimated card
+        is labelled, and the sources page repeats the label.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">How fast we update</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        Announcements are read on the day they are published, and the countdown targets are updated the same day. The
+        sources page records the last time each announcement was checked, so a reader can tell how current the data is
+        without asking.
+      </p>
+      <p>
+        When the maintenance window passes, the status strip on the home page follows the schedule automatically, and
+        the “last checked” timestamp is updated by hand whenever the page is reviewed.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Corrections</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        A wrong date is corrected as soon as an official source contradicts it, and the change is recorded in the
+        verification log. Corrections are not silently overwritten: the log keeps the old value visible next to the new
+        one.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="info"
+      title="Questions about this policy"
+      description="The contact page explains how to reach the site about a date, a source or a correction."
+    />
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a
+        class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+        href="/contact"
+      >
+        Contact and corrections
+      </a>
+      <a
+        class="inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+        href="/sources"
+      >
+        Sources and verification log
+      </a>
+    </div>
+  </section>
+</Layout>

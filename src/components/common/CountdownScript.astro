@@ -1,0 +1,158 @@
+---
+/**
+ * Shared runtime for every countdown on the site.
+ *
+ * The custom element reads its targets from `data-target` on `[data-zzz-timer]`
+ * elements and the schedule from `[data-zzz-status]`, so any page can drop in
+ * timers without repeating the script. Astro bundles the script once per page
+ * even when the component is used from several widgets.
+ *
+ * All arithmetic is done on absolute UTC instants; the visitor's local time is
+ * derived with `Intl`, never by adding a fixed offset. That keeps the answer
+ * correct across daylight saving boundaries.
+ */
+---
+
+<script>
+  class ZzzCountdown extends HTMLElement {
+    private timer?: number;
+
+    connectedCallback() {
+      this.tick();
+      this.timer = window.setInterval(() => this.tick(), 1000);
+    }
+
+    disconnectedCallback() {
+      window.clearInterval(this.timer);
+    }
+
+    private tick() {
+      const now = Date.now();
+
+      this.querySelectorAll<HTMLElement>('[data-zzz-timer]').forEach((card) => {
+        const target = new Date(card.dataset.target ?? '').getTime();
+        if (Number.isNaN(target)) return;
+
+        const diff = target - now;
+        const state = card.querySelector<HTMLElement>('[data-timer-state]');
+        const local = card.querySelector<HTMLElement>('[data-local-time]');
+
+        if (local) {
+          const d = new Date(target);
+          const formatted = new Intl.DateTimeFormat('en-GB', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }).format(d);
+          let zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          try {
+            zone =
+              new Intl.DateTimeFormat('en-GB', { timeZoneName: 'short' })
+                .formatToParts(d)
+                .find((p) => p.type === 'timeZoneName')?.value ?? zone;
+          } catch {
+            /* keep the IANA name */
+          }
+          local.textContent = `${formatted} (${zone})`;
+        }
+
+        if (diff <= 0) {
+          card.querySelectorAll<HTMLElement>('[data-unit]').forEach((u) => (u.textContent = '00'));
+          if (state) {
+            state.textContent = `${card.dataset.label ?? 'Done'} — reached`;
+          }
+          card.setAttribute('data-state', 'done');
+          return;
+        }
+
+        const s = Math.floor(diff / 1000);
+        const set = (unit: string, value: number) => {
+          const el = card.querySelector<HTMLElement>(`[data-unit="${unit}"]`);
+          if (el) el.textContent = String(value).padStart(2, '0');
+        };
+        set('days', Math.floor(s / 86400));
+        set('hours', Math.floor((s % 86400) / 3600));
+        set('minutes', Math.floor((s % 3600) / 60));
+        set('seconds', s % 60);
+
+        if (state) {
+          state.textContent =
+            card.dataset.estimated === 'true' ? 'Counting down to the estimated moment' : 'Counting down';
+        }
+        card.setAttribute('data-state', 'running');
+      });
+
+      this.updateStatus(now);
+    }
+
+    private updateStatus(now: number) {
+      const root = this.querySelector<HTMLElement>('[data-zzz-status]');
+      if (!root) return;
+
+      const at = (key: string) => new Date(root.dataset[key] ?? '').getTime();
+      const predownloadStart = at('predownloadStart');
+      const predownloadEnd = at('predownloadEnd');
+      const maintenance = at('maintenanceStart');
+      const launch = at('launch');
+      const versionEnd = at('versionEnd');
+
+      const title = root.querySelector<HTMLElement>('[data-status-title]');
+      const detail = root.querySelector<HTMLElement>('[data-status-detail]');
+      const dot = root.querySelector<HTMLElement>('[data-status-dot]');
+
+      let label: string;
+      let sub: string;
+      let color = 'bg-amber-400';
+
+      if (now < predownloadStart) {
+        label = 'The 3.3 pre-download has not opened yet';
+        sub = 'It opens on 2026/10/19 12:00 (UTC+8).';
+      } else if (now < predownloadEnd) {
+        label = 'The 3.3 pre-download is open';
+        sub = 'Download before 2026/10/21 05:50 (UTC+8). Mobile players cannot play while downloading.';
+        color = 'bg-sky-400';
+      } else if (now < maintenance) {
+        label = 'The pre-download has closed';
+        sub = 'Maintenance starts at 06:00 (UTC+8). Downloaded files are kept.';
+        color = 'bg-amber-400';
+      } else if (now < launch) {
+        label = 'Maintenance is running';
+        sub = 'The servers are closed while the update installs. The official estimate is about five hours.';
+        color = 'bg-amber-500';
+      } else if (now < versionEnd) {
+        label = 'Version 3.3 is live';
+        sub = 'Phase I banners run until 2026/11/11 11:59 (server time).';
+        color = 'bg-emerald-500';
+      } else {
+        label = 'Version 3.3 has ended';
+        sub = 'The version closed on 2026/12/02 06:00 (UTC+8).';
+        color = 'bg-slate-400';
+      }
+
+      if (title) title.textContent = label;
+      if (detail) detail.textContent = sub;
+      if (dot) dot.className = `inline-flex h-3 w-3 shrink-0 rounded-full ${color}`;
+    }
+  }
+
+  if (!customElements.get('zzz-countdown')) {
+    customElements.define('zzz-countdown', ZzzCountdown);
+  }
+
+  const attach = () => {
+    document.querySelectorAll<HTMLElement>('[data-zzz-timer], [data-zzz-status]').forEach((node) => {
+      if (node.closest('zzz-countdown')) return;
+      const parent = node.parentElement;
+      if (!parent) return;
+      const next = node.nextSibling;
+      const host = document.createElement('zzz-countdown');
+      // Move the node into the host first, then insert the host: inserting an
+      // empty host would fire `connectedCallback` before the timer it should
+      // render exists, leaving the counters blank until the next tick.
+      host.appendChild(node);
+      parent.insertBefore(host, next);
+    });
+  };
+
+  attach();
+  document.addEventListener('astro:page-load', attach);
+</script>

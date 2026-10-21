@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="628" viewBox="0 0 1200 628">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="55%" stop-color="#111a33"/>
+      <stop offset="100%" stop-color="#1b2a52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="18%" r="60%">
+      <stop offset="0%" stop-color="#2f7bff" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#2f7bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4f9cff"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="628" fill="url(#bg)"/>
+  <rect width="1200" height="628" fill="url(#glow)"/>
+
+  <rect x="0" y="0" width="1200" height="6" fill="url(#accent)"/>
+
+  <text x="72" y="128" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#6f8ec9" letter-spacing="4">ZENLESS ZONE ZERO</text>
+
+  <text x="72" y="212" font-family="DejaVu Sans, sans-serif" font-size="74" font-weight="bold" fill="#ffffff">ZZZ 3.3 Countdown</text>
+  <text x="72" y="262" font-family="DejaVu Sans, sans-serif" font-size="32" fill="#b9c8e6">Version 3.3 &#8220;Journey to the Sky&#8221; &#183; live timers</text>
+
+  <g>
+    <rect x="72" y="292" width="232" height="44" rx="22" fill="#4f9cff" fill-opacity="0.16" stroke="#4f9cff" stroke-opacity="0.55"/>
+    <circle cx="100" cy="314" r="7" fill="#5ee08a"/>
+    <text x="120" y="322" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#cfe0ff">Version is live</text>
+  </g>
+
+  <text x="72" y="374" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#7d8db0">Every date below is taken from the official HoYoverse announcement.</text>
+
+  <g>
+    
+    <text x="72" y="424" font-family="DejaVu Sans, sans-serif" font-size="23" fill="#93a4c4">Version 3.3 goes live</text>
+    <text x="1128" y="424" text-anchor="end" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="bold" fill="#e8eefc">Oct 21, 11:00 (UTC+8)</text>
+    <line x1="72" y1="440" x2="1128" y2="440" stroke-width="0"/>
+    <text x="72" y="472" font-family="DejaVu Sans, sans-serif" font-size="23" fill="#93a4c4">Phase I banners end</text>
+    <text x="1128" y="472" text-anchor="end" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="bold" fill="#e8eefc">Nov 11, 11:59 (server time)</text>
+    <line x1="72" y1="488" x2="1128" y2="488" stroke-width="0"/>
+    <text x="72" y="520" font-family="DejaVu Sans, sans-serif" font-size="23" fill="#93a4c4">Phase II banners end</text>
+    <text x="1128" y="520" text-anchor="end" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="bold" fill="#e8eefc">Dec 1, 14:59 (server time)</text>
+    <line x1="72" y1="536" x2="1128" y2="536" stroke-width="0"/>
+    <text x="72" y="568" font-family="DejaVu Sans, sans-serif" font-size="23" fill="#93a4c4">Version 3.3 ends</text>
+    <text x="1128" y="568" text-anchor="end" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="bold" fill="#e8eefc">Dec 2, 06:00 (UTC+8)</text>
+    <line x1="72" y1="584" x2="1128" y2="584" stroke-width="0"/>
+  </g>
+
+  <text x="72" y="598" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#66779b">zzzcountdown.site &#183; independent fan site, not affiliated with HoYoverse</text>
+
+  <g transform="translate(1010, 92)">
+    <circle cx="64" cy="64" r="60" fill="none" stroke="#2c3d63" stroke-width="8"/>
+    <circle cx="64" cy="64" r="60" fill="none" stroke="#4f9cff" stroke-width="8" stroke-linecap="round"
+            stroke-dasharray="301 377" transform="rotate(-90 64 64)"/>
+    <text x="64" y="76" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="46" font-weight="bold" fill="#ffffff">3.3</text>
+  </g>
+</svg>

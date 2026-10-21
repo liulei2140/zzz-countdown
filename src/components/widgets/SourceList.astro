@@ -1,0 +1,73 @@
+---
+/**
+ * The official announcements behind every date on the site, what each one
+ * confirms, and which numbers are estimates rather than published times.
+ */
+import { sources, SITE, milestones } from '~/data/zzz';
+
+const estimates = milestones.filter((m) => m.estimated);
+---
+
+<div class="mx-auto max-w-5xl">
+  <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">Where these dates come from</h2>
+  <p class="mt-3 text-lg text-muted">
+    Each entry below was read directly from HoYoverse. The verification log records when this page was last checked
+    against them.
+  </p>
+
+  <div class="mt-8 divide-y divide-gray-200 dark:divide-slate-700">
+    {
+      sources.map((s) => (
+        <div class="py-5">
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-700 dark:bg-slate-800 dark:text-slate-200">
+              {s.id}
+            </span>
+            <a
+              class="text-lg font-semibold text-heading underline underline-offset-2 hover:text-primary"
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {s.title}
+            </a>
+          </div>
+          <p class="mt-1 text-sm text-muted">Published {s.published}</p>
+          <p class="mt-2 text-muted">{s.confirms}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800/60 dark:bg-amber-950/30">
+    <h3 class="text-lg font-bold text-heading">What is an estimate here</h3>
+    <ul class="mt-3 list-disc space-y-2 pl-5 text-muted">
+      {
+        estimates.map((m) => (
+          <li>
+            <strong class="text-heading">{m.label}</strong> — {m.note}
+          </li>
+        ))
+      }
+      <li>
+        <strong class="text-heading">Phase II banner end</strong> — listed from the Intel Report and the wiki schedule; the
+        official Phase II notice is the confirmation to watch for.
+      </li>
+      <li>
+        <strong class="text-heading">The next version</strong> — expected around 2026/12/02 on the 42-day cadence, not an
+        announced date.
+      </li>
+    </ul>
+  </div>
+
+  <p class="mt-6 text-sm text-muted">
+    Last checked {SITE.lastChecked}. {SITE.disclaimer}
+  </p>
+
+  <a
+    class="mt-4 inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+    href="/sources"
+  >
+    Full verification log
+  </a>
+</div>

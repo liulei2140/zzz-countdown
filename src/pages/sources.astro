@@ -1,0 +1,213 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+import { sources, milestones, SITE } from '~/data/zzz';
+
+const metadata = {
+  title: 'Sources: Every ZZZ Update Date We Use and Where It Came From',
+  description:
+    'The official HoYoverse announcements behind every date on this site, what each one confirms, which numbers are estimates, and when each was last checked.',
+  ignoreTitleTemplate: true,
+};
+
+const kinds: Record<string, string> = {
+  'pre-download': 'Pre-download and maintenance',
+  update: 'Version update',
+  channels: 'Banner channels',
+  intel: 'Special Program and Intel Report',
+  previous: 'Previous version',
+  press: 'Press release and Steam feed',
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-5xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Verification</p>
+    <h1 class="mt-2 text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      Sources and verification log
+    </h1>
+    <p class="mt-4 text-xl text-muted">
+      Every date on this site comes from an announcement published by HoYoverse. This page lists each one, what it
+      confirms, and when it was last read. Anything that is not printed in one of these posts is labelled an estimate on
+      the page where it appears.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Official announcements for Version 3.3</h2>
+    <div class="mt-6 divide-y divide-gray-200 dark:divide-slate-700">
+      {
+        sources.map((s) => (
+          <div class="py-6">
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span class="rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-700 dark:bg-slate-800 dark:text-slate-200">
+                {s.id}
+              </span>
+              <span class="rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary dark:bg-blue-900/40 dark:text-blue-200">
+                {kinds[s.kind]}
+              </span>
+            </div>
+            <a
+              class="mt-2 block text-lg font-semibold text-heading underline underline-offset-2 hover:text-primary"
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {s.title}
+            </a>
+            <p class="mt-1 text-sm text-muted">Published {s.published}</p>
+            <p class="mt-2 text-muted">{s.confirms}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">What each source confirms</h2>
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[34rem] text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-slate-700">
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Date on this site</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Value</th>
+            <th scope="col" class="py-3 font-semibold text-heading">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            milestones.map((m) => (
+              <tr class="border-b border-gray-100 dark:border-slate-800">
+                <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
+                  {m.label}
+                </th>
+                <td class="py-3 pr-4 align-top text-muted">
+                  {new Intl.DateTimeFormat('en-GB', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                    timeZone: 'Asia/Shanghai',
+                  }).format(new Date(m.at))}
+                  {m.clock === 'server' ? ' (server time)' : ' (UTC+8)'}
+                  {m.estimated && (
+                    <span class="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">
+                      estimate
+                    </span>
+                  )}
+                </td>
+                <td class="py-3 align-top text-muted">
+                  <a
+                    class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
+                    href={sources.find((s) => s.id === m.sourceId)!.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {m.sourceId}
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">
+      What is an estimate, not an official time
+    </h2>
+    <ul class="mt-4 list-disc space-y-3 pl-5 text-muted">
+      <li>
+        <strong class="text-heading">The go-live minute.</strong> HoYoverse published the maintenance start (2026/10/21 06:00
+        UTC+8) and said the update “will take five hours”. 11:00 UTC+8 is that estimate, and it is labelled as such wherever
+        it appears.
+      </li>
+      <li>
+        <strong class="text-heading">The Phase II banner end.</strong> Taken from the Intel Report and the community schedule
+        until the official Phase II notice is published.
+      </li>
+      <li>
+        <strong class="text-heading">The next version date.</strong> Expected around 2026/12/02 on the 42-day cadence. Not
+        announced.
+      </li>
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Verification log</h2>
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full min-w-[28rem] text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-slate-700">
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Checked</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Action</th>
+            <th scope="col" class="py-3 font-semibold text-heading">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-100 dark:border-slate-800">
+            <td class="py-3 pr-4 align-top text-muted">{SITE.lastChecked}</td>
+            <td class="py-3 pr-4 align-top text-muted">Read all 3.3 announcements end to end</td>
+            <td class="py-3 align-top text-muted">All dates on this site confirmed or labelled as estimates</td>
+          </tr>
+          <tr class="border-b border-gray-100 dark:border-slate-800">
+            <td class="py-3 pr-4 align-top text-muted">{SITE.lastChecked}</td>
+            <td class="py-3 pr-4 align-top text-muted">Checked the Steam news feed for a go-live post</td>
+            <td class="py-3 align-top text-muted">No “servers are up” announcement exists yet</td>
+          </tr>
+          <tr class="border-b border-gray-100 dark:border-slate-800">
+            <td class="py-3 pr-4 align-top text-muted">{SITE.lastChecked}</td>
+            <td class="py-3 pr-4 align-top text-muted">Compared the Phase I and Phase II channel lists</td>
+            <td class="py-3 align-top text-muted">Match the community wiki channel table</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="info"
+      title="Corrections"
+      description="If a date on this site is wrong, tell us and it gets fixed and logged. The contact page explains how."
+    />
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a
+        class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+        href="/contact"
+      >
+        Report a wrong date
+      </a>
+      <a
+        class="inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+        href="/editorial-policy"
+      >
+        Read the editorial policy
+      </a>
+    </div>
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Open the live countdown',
+        href: '/',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'Release time in my zone', href: '/release-time' },
+    ]}
+  >
+    <Fragment slot="title">
+      Every date,<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">one source</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Phase I ends 2026/11/11 11:59 (server time). Version 3.3 ends 2026/12/02 06:00 (UTC+8).
+    </Fragment>
+  </CallToAction>
+</Layout>

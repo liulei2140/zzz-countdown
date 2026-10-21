@@ -1,0 +1,182 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Content from '~/components/widgets/Content.astro';
+
+import BannerCards from '~/components/widgets/BannerCards.astro';
+import KeyDates from '~/components/widgets/KeyDates.astro';
+
+import StructuredData from '~/components/common/StructuredData.astro';
+
+import { banners, faqs, sourceById } from '~/data/zzz';
+
+const metadata = {
+  title: 'ZZZ 3.3 Banners: Phase 1 and Phase 2 Schedule with Live Countdowns',
+  description:
+    'Every Zenless Zone Zero 3.3 Signal Search banner with a live timer — Phoenix and Velina in Phase 1, Severian in Phase 2, and the exact phase end times in server time.',
+  ignoreTitleTemplate: true,
+};
+
+const structuredData = banners.map((b) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: `${b.channel} - ${b.name} Signal Search (Zenless Zone Zero ${b.phase})`,
+  startDate: b.start,
+  endDate: b.endIso,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+}));
+---
+
+<Layout metadata={metadata}>
+  <StructuredData slot="head" schema={structuredData} />
+
+  <section class="mx-auto max-w-7xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Zenless Zone Zero 3.3</p>
+    <h1 class="mt-2 max-w-4xl text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      ZZZ 3.3 banners and phase timers
+    </h1>
+    <p class="mt-4 max-w-3xl text-xl text-muted">
+      Version 3.3 has two banner phases. Phase I runs with Phoenix, Velina, Plume of Rebirth and Joyau Dore until
+      <strong class="text-heading">2026/11/11 11:59 (server time)</strong>. Phase II then brings Severian, Norma and two
+      new W-Engine channels, and the banner cycle closes with the version on 2026/12/02 06:00 (UTC+8). Each card below
+      counts down on its own.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-12 sm:px-6" id="phase-1">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">Version 3.3 Phase I banners</h2>
+    <p class="mt-3 max-w-3xl text-lg text-muted">
+      The Phase I Signal Search channels open with the version update on 2026/10/21 06:00 (UTC+8). Two are Exclusive
+      Agent channels and two are W-Engine channels; all four close together.
+    </p>
+    <div class="mt-6">
+      <BannerCards phase="Phase I" />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-16 sm:px-6" id="when-does-phase-2-start">
+    <div
+      class="grid gap-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900 md:grid-cols-3 md:p-8"
+    >
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Phase I ends</p>
+        <p class="mt-2 text-2xl font-bold text-heading">Nov 11, 11:59</p>
+        <p class="mt-1 text-sm text-muted">Server time (UTC+8).</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Phase II starts</p>
+        <p class="mt-2 text-2xl font-bold text-heading">Nov 11, 12:00</p>
+        <p class="mt-1 text-sm text-muted">Right after the Phase I channels close.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Phase II ends</p>
+        <p class="mt-2 text-2xl font-bold text-heading">Dec 1, 14:59</p>
+        <p class="mt-1 text-sm text-muted">Server time, with the banner cycle of 3.3.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-16 sm:px-6" id="phase-2">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">Version 3.3 Phase II banners</h2>
+    <p class="mt-3 max-w-3xl text-lg text-muted">
+      Phase II swaps in Severian and a Norma rerun, with two new W-Engine channels. The lineup and window come from the
+      3.3 Intel Report published after the Special Program on October 9.
+    </p>
+    <div class="mt-6">
+      <BannerCards phase="Phase II" />
+    </div>
+
+    <div class="mt-6">
+      <Note
+        variant="warning"
+        title="The Phase II end time is still an estimate."
+        description="The official Phase I notice confirms the November 11 switch. The Phase II end time is taken from the Intel Report and the community schedule, and is confirmed when HoYoverse publishes the Phase II notice."
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-16 sm:px-6" id="guaranteed-counter">
+    <Content
+      isReversed
+      tagline="Rules"
+      title="How the guaranteed-signal counter works in 3.3"
+      items={[
+        {
+          title: 'Cumulative across Exclusive Channels',
+          description:
+            'The official Phase I notice states that the search count for guaranteed signals is cumulative across all Exclusive Channels, and independent of other types of channels.',
+        },
+        {
+          title: 'Limited units stay out of the stable channel',
+          description:
+            'The limited S-Rank Agents and limited S-Rank W-Engines in the Phase I channels will not become available in the Star-Studded Cast Stable Channel.',
+        },
+        {
+          title: 'Two Exclusive Agent channels, two W-Engine channels',
+          description:
+            'Phase I runs Into the Flames of Life (Phoenix) and Graceful Gale (Velina) as Exclusive channels, plus the Plume of Rebirth and Joyau Dore W-Engine channels.',
+        },
+      ]}
+    >
+      <Fragment slot="content">
+        <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">The rule, as printed</h3>
+        <blockquote class="rounded-2xl border-l-4 border-primary/60 bg-gray-50 p-5 text-heading dark:bg-slate-800">
+          “The Search count for guaranteed Signals is cumulative across all Exclusive Channels but is independent of and
+          unaffected by other types of channels.”
+        </blockquote>
+        <p class="mt-4">
+          Source:
+          <a
+            class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
+            href={sourceById('E03')!.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {sourceById('E03')!.id} · {sourceById('E03')!.title}
+          </a>
+        </p>
+      </Fragment>
+    </Content>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-16 sm:px-6">
+    <KeyDates
+      title="Banner and version deadlines"
+      only={['phase1-end', 'phase2-end', 'version-end', 'fix-compensation-end', 'store-sale-end']}
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-16 sm:px-6">
+    <FAQs
+      title="ZZZ banner timer FAQ"
+      subtitle="The questions the 3.3 banner schedule raises every version."
+      tagline="FAQ"
+      items={faqs.banners}
+    />
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'What is new in 3.3',
+        href: '/whats-new',
+        icon: 'tabler:list-details',
+      },
+      { text: 'Release time in my zone', href: '/release-time' },
+    ]}
+  >
+    <Fragment slot="title">
+      Know the schedule,<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">then decide</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Phoenix and Velina close on November 11. Severian and the Phase II reruns take over the same moment.
+    </Fragment>
+  </CallToAction>
+</Layout>

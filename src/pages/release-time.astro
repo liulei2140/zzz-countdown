@@ -1,0 +1,296 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Features from '~/components/widgets/Features.astro';
+
+import LocalTime from '~/components/widgets/LocalTime.astro';
+
+import StructuredData from '~/components/common/StructuredData.astro';
+
+import { timeZones, faqs } from '~/data/zzz';
+
+const metadata = {
+  title: 'ZZZ 3.3 Release Time in Every Time Zone (Maintenance Start & Expected Go-Live)',
+  description:
+    'When does Zenless Zone Zero 3.3 go live? Official maintenance starts 2026-10-21 06:00 (UTC+8) and is estimated to take about five hours — converted for 14 time zones, with the daylight saving offsets that actually apply.',
+  ignoreTitleTemplate: true,
+};
+
+const MAINTENANCE = new Date('2026-10-21T06:00:00+08:00');
+const LAUNCH = new Date('2026-10-21T11:00:00+08:00');
+
+/** Format a UTC instant in a given IANA zone. */
+const inZone = (date: Date, zone: string) =>
+  new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: zone,
+  }).format(date);
+
+const zoneLabel = (zone: string, date: Date) => {
+  try {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: zone, timeZoneName: 'short' }).formatToParts(date);
+    return parts.find((p) => p.type === 'timeZoneName')?.value ?? '';
+  } catch {
+    return '';
+  }
+};
+
+const rows = timeZones.map((tz) => {
+  const maintenance = inZone(MAINTENANCE, tz.zone);
+  const launch = inZone(LAUNCH, tz.zone);
+  const shift = tz.offset;
+  const diff = shift === 0 ? 'same as UTC+8' : `${shift > 0 ? '+' : ''}${shift} h vs UTC`;
+  return {
+    ...tz,
+    maintenance,
+    launch,
+    diff,
+    abbreviation: zoneLabel(tz.zone, LAUNCH),
+  };
+});
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.releaseTime.map((f) => ({
+    '@type': 'Question',
+    name: f.title,
+    acceptedAnswer: { '@type': 'Answer', text: f.description },
+  })),
+};
+---
+
+<Layout metadata={metadata}>
+  <StructuredData slot="head" schema={faqSchema} />
+
+  <section class="mx-auto max-w-7xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Zenless Zone Zero 3.3</p>
+    <h1 class="mt-2 max-w-4xl text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      When does ZZZ 3.3 release? Maintenance start and go-live times by time zone
+    </h1>
+    <p class="mt-4 max-w-3xl text-xl text-muted">
+      The official notice gives one clock and one estimate: maintenance starts at
+      <strong class="text-heading">2026/10/21 06:00 (UTC+8)</strong> and
+      <strong class="text-heading">“will take five hours”</strong>. That puts the estimated go-live moment at
+      <strong class="text-heading">11:00 (UTC+8)</strong>, which is still October 20 for readers in North America — the
+      reason several sites print a different date than HoYoverse does.
+    </p>
+
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Maintenance starts</p>
+        <p class="mt-2 text-xl font-bold text-heading">
+          <LocalTime iso="2026-10-21T06:00:00+08:00" />
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimated go-live</p>
+        <p class="mt-2 text-xl font-bold text-heading">
+          <LocalTime iso="2026-10-21T11:00:00+08:00" />
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Official wording</p>
+        <p class="mt-2 text-sm text-muted">“2026/10/21 06:00 (UTC+8) : We estimate this will take five hours.”</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">The official schedule, word for word</h2>
+    <div class="mt-4 max-w-3xl space-y-4 text-lg text-muted">
+      <p>
+        From the
+        <a
+          class="font-medium text-primary underline underline-offset-2 dark:text-blue-300"
+          href="https://www.hoyolab.com/article/47130875"
+          target="_blank"
+          rel="noopener noreferrer">Pre-Download &amp; Update Notice</a
+        >:
+      </p>
+      <blockquote class="rounded-2xl border-l-4 border-primary/60 bg-gray-50 p-5 text-heading dark:bg-slate-800">
+        “2026/10/21 06:00 (UTC+8) : We estimate this will take five hours. For details on aspects such as new gameplay,
+        optimizations, bug fixes, and compensation, please look out for future version update info.”
+      </blockquote>
+      <p>
+        The Update Announcement repeats it and adds the end of the version: “Please note that Version 3.3 will run for
+        42 days, ending on 2026/12/02 06:00 (UTC+8).”
+      </p>
+      <p class="text-base text-muted">
+        There is no published go-live minute anywhere in the official feed, and the Steam news channel for the game has
+        no “servers are up” post either. Any site showing a precise second is showing its own estimate, not an
+        announcement.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
+      Maintenance start and estimated go-live in 14 time zones
+    </h2>
+    <p class="mt-3 max-w-3xl text-lg text-muted">
+      Offsets are the ones in force on the 3.3 launch date. On that date the US is still on daylight saving time and
+      Europe is on summer time, which is exactly where fixed-offset tables go wrong.
+    </p>
+
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[46rem] text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-slate-700">
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Time zone</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">In force</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Maintenance starts</th>
+            <th scope="col" class="py-3 pr-4 font-semibold text-heading">Estimated go-live</th>
+            <th scope="col" class="py-3 font-semibold text-heading">Offset vs UTC+8</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((r) => (
+              <tr class="border-b border-gray-100 dark:border-slate-800">
+                <th scope="row" class="py-3 pr-4 align-top font-medium text-heading">
+                  {r.label}
+                  <span class="block text-xs font-normal text-muted">{r.zone}</span>
+                </th>
+                <td class="py-3 pr-4 align-top text-muted">{r.abbreviation || r.dst}</td>
+                <td class="py-3 pr-4 align-top text-muted">
+                  <time datetime="2026-10-21T06:00:00+08:00">{r.maintenance}</time>
+                </td>
+                <td class="py-3 pr-4 align-top text-muted">
+                  <time datetime="2026-10-21T11:00:00+08:00">{r.launch}</time>
+                </td>
+                <td class="py-3 align-top text-muted">{r.diff}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 text-sm text-muted">
+      The server clock is UTC+8 in every row above: “server time” in an official ZZZ notice means the same thing as
+      “(UTC+8)”.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="why-october-20">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
+      Why some sites say October 20 and others say October 21
+    </h2>
+    <div class="mt-4 max-w-3xl space-y-4 text-lg text-muted">
+      <p>They are describing the same moment on different clocks, and one of them is mixing up two different events.</p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li>
+          <strong class="text-heading">HoYoverse</strong> lists the update as <strong class="text-heading"
+            >October 21</strong
+          >, because that is the date on the UTC+8 server clock.
+        </li>
+        <li>
+          <strong class="text-heading">US-facing sites</strong> often print <strong class="text-heading"
+            >October 20</strong
+          >, because 2026-10-20 23:00 EDT is the same instant as 2026-10-21 11:00 UTC+8.
+        </li>
+        <li>
+          <strong class="text-heading">Maintenance start</strong> is a different event from
+          <strong class="text-heading">go-live</strong>: the update starts at 06:00 (UTC+8) and the servers come back
+          about five hours later. A page that prints a single “launch time” for both events is wrong on one of them.
+        </li>
+      </ul>
+      <p>
+        This site shows both moments separately everywhere, so a reader in California and a reader in Singapore are
+        looking at the same schedule.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6" id="corrections">
+    <h2 class="text-3xl font-bold tracking-tight text-heading md:text-4xl">
+      Time zone mistakes we checked and corrected
+    </h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Seen elsewhere</p>
+        <p class="mt-2 font-medium text-heading">“America runs on UTC-5 … 13 real hours apart”</p>
+        <p class="mt-2 text-muted">
+          On the 3.3 launch date the US was on EDT (UTC-4) and PDT (UTC-7), so the difference from UTC+8 is 12 hours,
+          not 13 — and one offset covers two different local times.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Seen elsewhere</p>
+        <p class="mt-2 font-medium text-heading">“ET (UTC-5)” rows, with several cells left empty</p>
+        <p class="mt-2 text-muted">
+          One Chinese launch-time table labels Eastern Time as UTC-5 in October, when the US is on UTC-4, and leaves the
+          Eastern end-of-version row blank. This table is complete and states which offset is in force.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
+    <Features
+      tagline="Next"
+      title="Keep the rest of the 3.3 schedule close"
+      subtitle="The release time is one date in a version that has several. These pages cover the ones you are likely to need next."
+      items={[
+        {
+          title: 'Banner phase timers',
+          description: 'Every 3.3 Signal Search channel with a live countdown to its end.',
+          icon: 'tabler:repeat',
+        },
+        {
+          title: 'Pre-download sizes',
+          description: 'What each platform needs and when the window closed.',
+          icon: 'tabler:download',
+        },
+        {
+          title: 'Version end date',
+          description: 'When 3.3 closes and when the next version is expected.',
+          icon: 'tabler:calendar-event',
+        },
+      ]}
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 mt-14 sm:px-6">
+    <FAQs
+      title="Release time FAQ"
+      subtitle="Time zone questions that come up on every version launch."
+      tagline="FAQ"
+      items={faqs.releaseTime}
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="warning"
+      title="The go-live time on this page is an estimate."
+      description="HoYoverse published the maintenance start and a five-hour estimate, not a go-live minute. As soon as the update finishes, the countdown on the home page shows the version as live."
+    />
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Open the live countdown',
+        href: '/',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'See the banner schedule', href: '/banners' },
+    ]}
+  >
+    <Fragment slot="title">
+      The clock you<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">actually need</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Four timers on one page: the version launch, the Phase I switch, the Phase II switch and the end of 3.3.
+    </Fragment>
+  </CallToAction>
+</Layout>

@@ -1,0 +1,42 @@
+site:
+  name: 'ZZZ Countdown'
+  # Canonical host. Rewritten at build time from the SITE_URL environment
+  # variable (scripts/set-site-url.mjs); canonical URLs, the sitemap and
+  # robots.txt all derive from this value.
+  site: 'https://zzz-countdown.pages.dev'
+  base: '/'
+  trailingSlash: false
+
+# Default SEO metadata
+metadata:
+  title:
+    default: 'ZZZ Countdown — Zenless Zone Zero release timers and banner schedule'
+    template: '%s | ZZZ Countdown'
+  description: 'Live countdowns for Zenless Zone Zero version updates: release time in your time zone, Phase 1 and Phase 2 banner timers, pre-download sizes and the exact dates behind every version, verified against official HoYoverse announcements.'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: 'ZZZ Countdown'
+    images:
+      - url: '~/assets/images/og-zzz-3-3.png'
+        width: 1200
+        height: 628
+    type: website
+
+i18n:
+  language: en
+  textDirection: ltr
+
+apps:
+  # The countdown pages are the site. There is no blog.
+  blog:
+    isEnabled: false
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

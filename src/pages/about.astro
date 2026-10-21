@@ -1,0 +1,127 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Content from '~/components/widgets/Content.astro';
+
+import { SITE } from '~/data/zzz';
+
+const metadata = {
+  title: 'About ZZZ Countdown: Who Runs This Site and How It Works',
+  description:
+    'ZZZ Countdown is an independent fan site that tracks Zenless Zone Zero version release times, banner schedules and live countdowns, verified against official HoYoverse announcements.',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-4xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">About</p>
+    <h1 class="mt-2 text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">About ZZZ Countdown</h1>
+    <p class="mt-4 text-xl text-muted">
+      This site exists for one reason: when a Zenless Zone Zero version is about to land, the people searching for it
+      want a timer that is correct, and they want to know where the moment came from.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">What this site tracks</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>For every version of Zenless Zone Zero, this site publishes:</p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li>the release and go-live moment, converted into your own time zone;</li>
+        <li>the Phase I and Phase II banner switch dates, each with its own live timer;</li>
+        <li>the pre-download window, the file size per platform and the compensation conditions;</li>
+        <li>the date the version ends, and the date the next version is expected.</li>
+      </ul>
+      <p>
+        The site is built for a specific moment in the version cycle and is meant to be re-checked, not just read once.
+        The version history page is where the six-week rhythm is laid out, because the countdown for 3.4 starts long
+        before 3.4 is announced.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">How we verify dates</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        Every date comes from an announcement published by HoYoverse, read directly rather than summarised from another
+        site. The maintenance start, the version end and the Phase I switch are printed in those notices, and each one
+        is linked next to the date it supports.
+      </p>
+      <p>
+        Where HoYoverse has not published something, this site says so. The go-live minute is the clearest example: the
+        official notice gives a maintenance start and a five-hour estimate, never a published go-live time, so the
+        countdown labels that moment as an estimate and the sources page explains the calculation.
+      </p>
+      <p>
+        The full list of announcements, what each one confirms, and the last time it was checked is on the
+        <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/sources"
+          >sources page</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Who we are</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        ZZZ Countdown is a small independent project run by players who kept getting the same two questions in community
+        threads: what time does it go live in my zone, and when does the banner I want actually end. This site answers
+        them in one place and keeps the receipts.
+      </p>
+      <p>
+        The site is written in English for an English-speaking audience. If you found a date here that is wrong or
+        outdated, the
+        <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/contact"
+          >contact page</a
+        >
+        explains how to report it, and corrections get logged publicly.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <Note
+      variant="warning"
+      title="Not affiliated with HoYoverse or miHoYo."
+      description="ZZZ Countdown is an independent fan site. Zenless Zone Zero is a trademark of HoYoverse. All game content, names and announcements belong to their respective owners; this site only references them and links back to the originals."
+    />
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-4 mt-10 sm:px-6">
+    <Content
+      tagline="Next"
+      title="Start with the timers"
+      items={[
+        { title: 'Countdown', description: 'Four live timers for the 3.3 cycle.' },
+        { title: 'Release time', description: 'The same moments in 14 time zones.' },
+        { title: 'Banners', description: 'Every 3.3 Signal Search channel with its own timer.' },
+      ]}
+    />
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Open the live countdown',
+        href: '/',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'Read the editorial policy', href: '/editorial-policy' },
+    ]}
+  >
+    <Fragment slot="title">
+      Timers that<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">tell you where</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      {SITE.officialDateLabel} · maintenance 06:00 (UTC+8) · estimated go-live 11:00 (UTC+8)
+    </Fragment>
+  </CallToAction>
+</Layout>

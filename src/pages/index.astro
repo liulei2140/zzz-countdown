@@ -1,0 +1,313 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Hero from '~/components/widgets/Hero.astro';
+import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Timeline from '~/components/widgets/Timeline.astro';
+
+import VersionCountdown from '~/components/widgets/VersionCountdown.astro';
+import KeyDates from '~/components/widgets/KeyDates.astro';
+import SourceList from '~/components/widgets/SourceList.astro';
+import LocalTime from '~/components/widgets/LocalTime.astro';
+
+import StructuredData from '~/components/common/StructuredData.astro';
+
+import { SITE, I18N } from 'astrowind:config';
+import { banners, faqs, preDownload } from '~/data/zzz';
+
+const metadata = {
+  title: 'ZZZ 3.3 Countdown: Live Timer, Release Time & Banners (Oct 21, 2026)',
+  description:
+    'Live countdown to Zenless Zone Zero 3.3 "Journey to the Sky" — release time in your timezone, Phase 1 and Phase 2 banner timers, and the date Version 3.3 ends. Every date checked against the official HoYoverse announcement.',
+  ignoreTitleTemplate: true,
+};
+
+const organizationId = `${SITE?.site}/#organization`;
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE?.site}/#website`,
+    name: SITE?.name,
+    url: SITE?.site,
+    inLanguage: I18N?.language,
+    publisher: { '@id': organizationId },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': organizationId,
+    name: SITE?.name,
+    url: SITE?.site,
+  },
+  ...banners.map((b) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: `${b.channel} - ${b.name} Signal Search (Zenless Zone Zero ${b.phase})`,
+    startDate: b.start,
+    endDate: b.endIso,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+    location: { '@type': 'VirtualLocation', url: `${SITE?.site}/banners/` },
+  })),
+];
+---
+
+<Layout metadata={metadata}>
+  <StructuredData slot="head" schema={structuredData} />
+
+  <Hero
+    tagline="Zenless Zone Zero · Version 3.3"
+    badge="Live timer"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Release time in your zone',
+        href: '/release-time',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'See the 3.3 banners', href: '/banners' },
+    ]}
+  >
+    <Fragment slot="title">
+      ZZZ 3.3 Countdown:<br class="hidden sm:inline" />
+      <span class="text-accent dark:text-white">"Journey to the Sky"</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Version 3.3 of Zenless Zone Zero went live on October 21, 2026. Below is the countdown to the
+      <strong>Phase I banner switch</strong>, the <strong>Phase II banner switch</strong> and the
+      <strong>end of Version 3.3</strong> — plus the exact release time for your own time zone and every official date behind
+      them.
+    </Fragment>
+  </Hero>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6">
+    <VersionCountdown />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-10">
+    <Note
+      variant="info"
+      title="Every date here comes from an official announcement."
+      description="The go-live moment is an estimate: HoYoverse says maintenance starts at 2026/10/21 06:00 (UTC+8) and “will take five hours”. Everything else is printed in the official notices, and each row links to the post it comes from."
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-14" id="your-time">
+    <div
+      class="grid gap-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900 md:grid-cols-3 md:p-8"
+    >
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">In your time zone</p>
+        <p class="mt-2 text-2xl font-bold text-heading">
+          <LocalTime iso="2026-10-21T11:00:00+08:00" label="Version 3.3 goes live" />
+        </p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">On the server clock (UTC+8)</p>
+        <p class="mt-2 text-2xl font-bold text-heading">Oct 21, 2026 · 11:00</p>
+        <p class="mt-1 text-sm text-muted">
+          Same moment as Oct 20, 23:00 EDT — the reason some sites print October 20.
+        </p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Maintenance window</p>
+        <p class="mt-2 text-2xl font-bold text-heading">06:00 → ~11:00</p>
+        <p class="mt-1 text-sm text-muted">Servers are closed while the update installs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16">
+    <KeyDates title="ZZZ 3.3 key dates at a glance" />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="next">
+    <Features
+      tagline="Next steps"
+      title="What are you trying to do?"
+      subtitle="Each page answers one task, so you get the fact you came for without scrolling past the rest of the update."
+      items={[
+        {
+          title: 'Convert the release time',
+          description:
+            'Every 3.3 moment in 14 time zones, with the daylight saving offset that is actually in force on the day. Includes the corrections we made to the offsets other countdown pages print.',
+          icon: 'tabler:world',
+        },
+        {
+          title: 'Check the banner schedule',
+          description:
+            'The eight 3.3 Signal Search channels with a live timer on each one, the Phase I and Phase II switch-over, and how the guaranteed-signal counter works across Exclusive Channels.',
+          icon: 'tabler:repeat',
+        },
+        {
+          title: 'Prepare the pre-download',
+          description:
+            'File sizes for PC, mobile, PS5 and Xbox, the download window, the platform that cannot play while downloading, and how the Polychrome x300 compensation is claimed.',
+          icon: 'tabler:download',
+        },
+        {
+          title: 'Read what changed',
+          description:
+            'Phoenix, Severian, the mech combat, the new events and areas, the store additions and the compensation deadlines, written out from the update announcement.',
+          icon: 'tabler:list-details',
+        },
+      ]}
+    >
+      <Fragment slot="bg">
+        <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+      </Fragment>
+    </Features>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="banners">
+    <Content
+      isReversed
+      tagline="Phase I"
+      title="The 3.3 banners, and how long each one runs"
+      items={banners
+        .filter((b) => b.phase === 'Phase I')
+        .map((b) => ({
+          title: `${b.name} — ${b.kind}`,
+          description: `${b.channel} · ${b.attribute || 'attribute not published'} · ends ${b.end}`,
+        }))}
+    >
+      <Fragment slot="content">
+        <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Four channels in Phase I</h3>
+        <p class="mb-4">
+          Phoenix and Velina run in Exclusive Channels, Plume of Rebirth and Joyau Dore in W-Engine channels. All four
+          close at 2026/11/11 11:59 (server time), when Phase II opens with Severian and the Phase II reruns.
+        </p>
+        <p>
+          The official Phase I notice also states that the search count for guaranteed signals is cumulative across all
+          Exclusive Channels, and that the limited S-Rank Agents and W-Engines in those channels do not appear in the
+          Star-Studded Cast Stable Channel.
+        </p>
+      </Fragment>
+    </Content>
+
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+        href="/banners"
+      >
+        All 3.3 banners with live timers
+      </a>
+      <a
+        class="inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+        href="/whats-new"
+      >
+        What is new in 3.3
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="pre-download">
+    <Content
+      tagline="Before you update"
+      title="Pre-download sizes, straight from the official notice"
+      items={preDownload.platforms.map((p) => ({
+        title: `${p.platform}`,
+        description: `${p.size} — ${p.detail}`,
+      }))}
+    >
+      <Fragment slot="content">
+        <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
+          Six, five, fourteen, twenty-one
+        </h3>
+        <p class="mb-4">
+          The 3.3 pre-download ran from {preDownload.window}. PC players could keep playing while it downloaded; on
+          mobile the official notice says the game cannot be played during the pre-download.
+        </p>
+        <p>
+          The Polychrome x300 server update compensation required Inter-Knot Lv. 4 before 2026/10/21 06:00 (UTC+8) and
+          has to be claimed before the end of Version 3.3.
+        </p>
+      </Fragment>
+    </Content>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="whats-new">
+    <Timeline
+      tagline="In this version"
+      title="What Version 3.3 actually changed"
+      items={[
+        {
+          date: 'Agents',
+          title: 'Phoenix and Severian',
+          description:
+            'Phoenix (Fire - Anomaly) opens the version in the "Into the Flames of Life" channel. Severian (Wind - Attack) arrives in Phase II with "Answers in the Wind".',
+          icon: 'tabler:user-star',
+        },
+        {
+          date: 'Combat',
+          title: 'Controllable mechs',
+          description:
+            'The headline feature of "Journey to the Sky": mech combat with a close-range and a long-range mode.',
+          icon: 'tabler:robot',
+        },
+        {
+          date: 'Events',
+          title: 'A full event slate',
+          description: `New Agent Trust events, "${'En-Nah'}" Into Your Lap, Angels Support Operation, Spooky Funhouse Tales, Trails of the Hobbling Crow and more.`,
+          icon: 'tabler:confetti',
+        },
+        {
+          date: 'Areas',
+          title: 'Quietude Isle and the Airspace Control Tower',
+          description:
+            'Two new restricted areas on Roscaelifer, plus Phaethon\'s Story Season 3 Chapter 4 "Journey to the Sky".',
+          icon: 'tabler:map-2',
+        },
+        {
+          date: 'Rewards',
+          title: 'Login rewards and compensation',
+          description:
+            'Polychrome x300 for the server update and for the issue fixes, claimable by mail before 2026/11/20 23:59 (UTC+8).',
+          icon: 'tabler:gift',
+        },
+      ]}
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="faqs">
+    <FAQs
+      title="ZZZ 3.3 countdown FAQ"
+      subtitle="The questions that come up on every version launch, answered with the official wording."
+      tagline="FAQ"
+      schema
+      items={faqs.home}
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 mt-16" id="sources">
+    <SourceList />
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Check the 3.3 banner schedule',
+        href: '/banners',
+        icon: 'tabler:repeat',
+      },
+      { text: 'Release time in my zone', href: '/release-time' },
+    ]}
+  >
+    <Fragment slot="title">
+      Every 3.3 date,<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">one source of truth</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Phase I ends 2026/11/11 11:59 (server time). Phase II ends with the banner cycle.
+      <br class="hidden md:inline" />Version 3.3 itself ends 2026/12/02 06:00 (UTC+8).
+    </Fragment>
+  </CallToAction>
+</Layout>

@@ -1,0 +1,124 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Note from '~/components/widgets/Note.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Contact ZZZ Countdown: Report a Wrong Date or Request a Correction',
+  description:
+    'Report a wrong or outdated Zenless Zone Zero version date, suggest an official source we are missing, or ask about how a countdown page is updated.',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="mx-auto max-w-4xl px-4 pt-12 sm:px-6">
+    <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200">Contact</p>
+    <h1 class="mt-2 text-4xl font-bold leading-tight tracking-tighter text-heading md:text-5xl">
+      Contact and corrections
+    </h1>
+    <p class="mt-4 text-xl text-muted">
+      A date on this site that is wrong is a bug, and bugs get fixed. The fastest way to get one fixed is to point at
+      the official announcement that says otherwise.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Report a wrong or outdated date</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>Useful details to include:</p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li>the page and the date you believe is wrong;</li>
+        <li>the official announcement that contradicts it, with a link;</li>
+        <li>your time zone, if the disagreement is about a local time.</li>
+      </ul>
+      <p>
+        Corrections are applied to the page and recorded in the verification log on the
+        <a class="font-medium text-primary underline underline-offset-2 dark:text-blue-300" href="/sources"
+          >sources page</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Suggest a source we are missing</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        If a HoYoverse announcement exists that this site does not link yet — a Phase II notice, a store notice, a
+        Special Program code — send it over. Sources are added to the list and cited on the pages that use them.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Update requests</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <p>
+        Each version gets its own set of pages, and the schedule pages are rewritten when the next version is announced.
+        Requests about a specific version are welcome; requests to change a date are not, because dates come from the
+        official notices.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">What this site cannot answer</h2>
+    <div class="mt-4 space-y-4 text-lg text-muted">
+      <ul class="list-disc space-y-2 pl-5">
+        <li>account, gacha or billing questions — those go to HoYoverse support;</li>
+        <li>
+          guarantee or pull-outcome questions — a countdown page cannot tell you what a Signal Search will give you;
+        </li>
+        <li>bug reports about the game itself;</li>
+        <li>anything that needs a personal account to answer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-4 mt-10 sm:px-6">
+    <Note
+      variant="info"
+      title="Where to send it"
+      description="Email and contact addresses are added to this page when the site's contact form is wired up. Until then, the fastest route is the official announcement thread on HoYoLAB, where a date correction is visible to everyone at once."
+    />
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a
+        class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+        href="https://www.hoyolab.com/article/47149468"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Official 3.3 update announcement
+      </a>
+      <a
+        class="inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-heading hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
+        href="/sources"
+      >
+        Sources and verification log
+      </a>
+    </div>
+  </section>
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Open the live countdown',
+        href: '/',
+        icon: 'tabler:clock-hour-4',
+      },
+      { text: 'Read the editorial policy', href: '/editorial-policy' },
+    ]}
+  >
+    <Fragment slot="title">
+      Found a wrong<br class="block sm:hidden" />
+      <span class="sm:whitespace-nowrap">date?</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Send the official announcement that says so, and the page gets corrected and logged.
+    </Fragment>
+  </CallToAction>
+</Layout>

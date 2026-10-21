@@ -24,7 +24,7 @@ npm install
 npm run dev       # local dev server on :4321
 npm run build     # og image -> site URL -> astro build  (output: dist/)
 npm run preview   # serve the built site
-npm run verify    # DOM test of the built countdown behaviour
+npm run verify    # DOM test of the built countdown behaviour + density + link checks
 ```
 
 `npm run build` runs three steps in order:
@@ -57,6 +57,23 @@ custom element:
 reads “reached”, the Phase I timer reads 20d 17h 59m, the status reads
 “Version 3.3 is live”, and the eight banner timers on `/banners` each show
 their own countdown.
+
+It also guards the layout, so the site cannot quietly drift back into a wall of
+text:
+
+- **word budget** — every page has a ceiling on its visible word count;
+- **artwork** — every content page must render at least one image;
+- **`/whats-new` grid** — the “The dates behind this update” block must be three
+  cards in a three-column grid, so it can never leave half a row empty;
+- **internal links** — `scripts/check-links.mjs` walks `dist/` and fails on any
+  link that does not resolve to a built route.
+
+## Artwork
+
+All images are original, generated for this site, and live in
+`src/assets/images/`. No publisher artwork is used. `SectionArt.astro` renders
+a captioned full-width band; `PhaseTimeline.astro` draws the version cycle to
+scale with a live “you are here” marker.
 
 ## Per-version routine
 

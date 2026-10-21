@@ -12,7 +12,7 @@
     "start": "astro dev",
     "og": "node scripts/og-image.mjs",
     "favicons": "node scripts/build-favicons.mjs",
-    "build": "npm run og && node scripts/set-site-url.mjs && npm run favicons && astro build",
+    "build": "node scripts/set-site-url.mjs && npm run og && npm run favicons && astro build",
     "preview": "astro preview",
     "verify": "node scripts/verify-countdown.mjs && node scripts/check-links.mjs",
     "check": "astro check",

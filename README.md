@@ -113,13 +113,13 @@ The site is rebuilt for every version (roughly every six weeks):
 
 ## Deployment to Cloudflare Pages
 
-The site is live at <https://zzz-countdown.pages.dev> (project `zzz-countdown`,
+The site is live at <https://zzzcountdown.space> (project `zzz-countdown`,
 production branch `main`).
 
 Deploy from a local machine:
 
 ```bash
-SITE_URL=https://zzz-countdown.pages.dev npm run build
+SITE_URL=https://zzzcountdown.space npm run build
 npx wrangler pages deploy dist --project-name=zzz-countdown --branch=main
 ```
 
@@ -140,8 +140,55 @@ gh secret set CLOUDFLARE_API_TOKEN --repo liulei2140/zzz-countdown
 gh secret set CLOUDFLARE_ACCOUNT_ID --repo liulei2140/zzz-countdown --body f347ea77ea0eb80226457a78b20baf3a
 ```
 
+## Custom domain
+
+The canonical host is `zzzcountdown.space`. The zone is hosted on Cloudflare
+(the registrar stays Spaceship; only the name servers moved), and the Pages
+project `zzz-countdown` has both `zzzcountdown.space` and
+`www.zzzcountdown.space` attached as custom domains.
+
+| Where                 | Record                                                        |
+| --------------------- | ------------------------------------------------------------- |
+| Cloudflare DNS        | `CNAME @` → `zzz-countdown.pages.dev` (proxied)               |
+| Cloudflare DNS        | `CNAME www` → `zzz-countdown.pages.dev` (proxied)             |
+| Registrar (Spaceship) | NS → `desiree.ns.cloudflare.com`, `quinton.ns.cloudflare.com` |
+
+Cloudflare flattens the apex CNAME, so the root domain resolves without an A
+record.
+
+Everything on the site derives from one switch. `SITE_URL` rewrites the `site:`
+field in `src/config.yaml`, and the canonical link, Open Graph URL, sitemap,
+`robots.txt` and the Open Graph card all follow it — nothing else names the
+host. `npm run verify` asserts that those five agree with each other and that
+no host from an earlier domain is left behind.
+
+The Pages host `zzz-countdown.pages.dev` stays reachable as a fallback. To
+send it to the custom domain instead, add a redirect rule in
+`public/_redirects`:
+
+```
+/* https://zzzcountdown.space/:splat 301
+```
+
+## Analytics
+
+Google Analytics 4 runs with the measurement ID `G-6S85YYNPTX`. The ID comes
+from the build environment — `PUBLIC_GA_ID` — so it can be changed without
+editing a tracked file:
+
+| Where     | How                                                                           |
+| --------- | ----------------------------------------------------------------------------- |
+| Local     | `PUBLIC_GA_ID=...` in `.env` (not tracked)                                    |
+| CI        | the `PUBLIC_GA_ID` repository variable                                        |
+| Component | `src/components/common/Analytics.astro` loads the tag only when the ID is set |
+
+`/privacy` names the provider, what it measures, the `_ga` cookie and its
+retention, and an opt-out link. `npm run verify` fails if the tag and the
+disclosure disagree.
+
 ## Notes
 
 - The site is an independent fan project and is not affiliated with HoYoverse.
 - The go-live minute is an estimate (official maintenance start + “about five hours”); the pages label it as such.
-- `src/config.yaml` holds a placeholder domain until `SITE_URL` is set.
+- `src/config.yaml` holds the canonical host. It is rewritten on every build from `SITE_URL`
+  (the environment variable wins; `.env` is the fallback).

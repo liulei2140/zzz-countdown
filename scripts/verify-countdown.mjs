@@ -213,7 +213,9 @@ const density = [
   { page: 'sources/index.html', maxWords: 560, minImages: 1 },
   { page: 'about/index.html', maxWords: 400, minImages: 1 },
   { page: 'contact/index.html', maxWords: 340, minImages: 1 },
-  { page: 'privacy/index.html', maxWords: 300, minImages: 1 },
+  // The privacy page carries the analytics disclosure (provider, cookie,
+  // retention, opt-out), so it needs more room than the other short pages.
+  { page: 'privacy/index.html', maxWords: 380, minImages: 1 },
   { page: 'editorial-policy/index.html', maxWords: 430, minImages: 1 },
 ];
 
@@ -315,6 +317,71 @@ console.log('\n=== favicon ===');
   expect(home.includes('rel="apple-touch-icon"'), 'the home page has no apple-touch icon');
   expect(/<meta[^>]*name="theme-color"[^>]*>/.test(home), 'the home page has no theme-color meta tag');
   expect(existsSync(resolve(root, 'dist/favicon.ico')), 'dist/favicon.ico is missing');
+}
+
+// --- analytics -------------------------------------------------------------
+// The measurement ID is configured through the build environment
+// (PUBLIC_GA_ID), and the privacy page has to name the same service.
+console.log('\n=== analytics ===');
+{
+  const home = readFileSync(resolve(root, 'dist/index.html'), 'utf8');
+  const gaSrc = home.match(/<script[^>]*src="(https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=[^"]+)"/)?.[1];
+  const gaId = gaSrc?.match(/id=([^&"]+)/)?.[1];
+  console.log(`  GA4 measurement id: ${gaId ?? '(missing)'}`);
+  expect(Boolean(gaId), 'the home page does not load Google Analytics');
+  expect(gaId === 'G-6S85YYNPTX', `unexpected GA4 measurement id "${gaId}"`);
+  expect(/gtag\(\s*['"]config['"]/.test(home), 'the GA4 config call is missing');
+
+  const privacy = readFileSync(resolve(root, 'dist/privacy/index.html'), 'utf8');
+  expect(
+    privacy.includes('G-6S85YYNPTX') && privacy.includes('Google Analytics 4'),
+    'the privacy page does not disclose the analytics service in use'
+  );
+  expect(
+    !/No analytics service is currently running/i.test(privacy),
+    'the privacy page still claims that no analytics service runs'
+  );
+}
+
+// --- one canonical host ----------------------------------------------------
+// Everything that names the site has to name the same host: the canonical
+// link, Open Graph, the sitemap, robots.txt and the card image.
+console.log('\n=== domain ===');
+{
+  const config = readFileSync(resolve(root, 'src/config.yaml'), 'utf8');
+  const configured = config.match(/^\s{2}site:\s*['"]?(https?:\/\/[^'"\n]+)/m)?.[1];
+  expect(Boolean(configured), 'src/config.yaml has no site: field');
+
+  const expectedHost = configured ? new URL(configured).host : '';
+  const home = readFileSync(resolve(root, 'dist/index.html'), 'utf8');
+
+  const canonicalTag = home.match(/<link[^>]*rel="canonical"[^>]*>/)?.[0];
+  const canonical = canonicalTag?.match(/href="([^"]+)"/)?.[1];
+  const ogTag = home.match(/<meta[^>]*property="og:url"[^>]*>/)?.[0];
+  const ogUrl = ogTag?.match(/content="([^"]+)"/)?.[1];
+
+  const hosts = {
+    canonical: canonical ? new URL(canonical).host : '(missing)',
+    'og:url': ogUrl ? new URL(ogUrl).host : '(missing)',
+  };
+
+  const sitemap = readFileSync(resolve(root, 'dist/sitemap.xml'), 'utf8');
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  hosts['sitemap.xml'] = locs.length ? new URL(locs[0]).host : '(empty)';
+
+  const robots = readFileSync(resolve(root, 'dist/robots.txt'), 'utf8');
+  const robotsSitemap = robots.match(/^Sitemap:\s*(\S+)$/m)?.[1];
+  hosts['robots.txt'] = robotsSitemap ? new URL(robotsSitemap).host : '(missing)';
+
+  for (const [where, host] of Object.entries(hosts)) {
+    console.log(`  ${where.padEnd(14)} ${host}`);
+    expect(host === expectedHost, `${where} points at ${host}, expected ${expectedHost}`);
+  }
+
+  // A leftover host from an earlier domain would split the site's signals.
+  for (const stale of ['zzz-countdown.pages.dev', 'zzzcountdown.site']) {
+    expect(!home.includes(stale), `the built page still references the old host "${stale}"`);
+  }
 }
 
 console.log('\n=== assertions ===');

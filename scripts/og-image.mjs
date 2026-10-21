@@ -8,7 +8,7 @@
  *
  * Run: node scripts/og-image.mjs
  */
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import sharp from 'sharp';
@@ -19,6 +19,26 @@ const outFile = resolve(outDir, 'og-zzz-3-3.png');
 
 const W = 1200;
 const H = 628;
+
+/**
+ * The host printed on the card. It has to be the host the site is actually
+ * served from, so it is read from SITE_URL (set by the deployment) and falls
+ * back to the `site:` field in src/config.yaml. A hardcoded host would go
+ * stale the moment the domain changes.
+ */
+async function resolveHost() {
+  const fromEnv = process.env.SITE_URL?.trim();
+  const fromConfig = await readFile(resolve(root, 'src/config.yaml'), 'utf8')
+    .then((text) => text.match(/^\s{2}site:\s*['"]?([^'"\n]+)/m)?.[1])
+    .catch(() => undefined);
+  const raw = fromEnv || fromConfig || '';
+  return raw
+    .replace(/^https?:\/\//, '')
+    .replace(/\/+$/, '')
+    .replace(/^www\./, '');
+}
+
+const host = await resolveHost();
 
 const rows = [
   ['Version 3.3 goes live', 'Oct 21, 11:00 (UTC+8)'],
@@ -78,7 +98,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
     ${rowMarkup}
   </g>
 
-  <text x="72" y="${H - 30}" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#66779b">zzzcountdown.site &#183; independent fan site, not affiliated with HoYoverse</text>
+  <text x="72" y="${H - 30}" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#66779b">${escape(host)} &#183; independent fan site, not affiliated with HoYoverse</text>
 
   <g transform="translate(1010, 92)">
     <circle cx="64" cy="64" r="60" fill="none" stroke="#2c3d63" stroke-width="8"/>

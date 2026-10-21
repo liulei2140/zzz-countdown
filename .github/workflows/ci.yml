@@ -38,7 +38,8 @@ jobs:
 
       - name: Build
         env:
-          SITE_URL: https://zzz-countdown.pages.dev
+          SITE_URL: ${{ vars.SITE_URL || 'https://zzzcountdown.space' }}
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
         run: npm run build
 
       - name: Verify the built countdown
@@ -81,7 +82,8 @@ jobs:
 
       - name: Build
         env:
-          SITE_URL: https://zzz-countdown.pages.dev
+          SITE_URL: ${{ vars.SITE_URL || 'https://zzzcountdown.space' }}
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
         run: npm run build
 
       - name: Deploy to Cloudflare Pages

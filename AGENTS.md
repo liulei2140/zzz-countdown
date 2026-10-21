@@ -8,7 +8,7 @@ built on [AstroWind](https://github.com/arthelokyo/astrowind) (Astro 7 +
 Tailwind CSS v4), which is MIT licensed — keep `LICENSE.md` and the attribution
 in the README.
 
-Live site: <https://zzz-countdown.pages.dev>
+Live site: <https://zzzcountdown.space> (custom domain; the Pages host `zzz-countdown.pages.dev` stays as the fallback)
 
 ## The one rule that matters
 
@@ -34,7 +34,7 @@ npm run preview    # serve the built site
 npm run verify     # DOM test of the built countdown behaviour
 ```
 
-`SITE_URL=https://zzz-countdown.pages.dev npm run build` rewrites the canonical
+`SITE_URL=https://zzzcountdown.space npm run build` rewrites the canonical
 host in `src/config.yaml` before building.
 
 ## Layout

@@ -3,7 +3,7 @@ site:
   # Canonical host. Rewritten at build time from the SITE_URL environment
   # variable (scripts/set-site-url.mjs); canonical URLs, the sitemap and
   # robots.txt all derive from this value.
-  site: 'https://zzz-countdown.pages.dev'
+  site: 'https://zzzcountdown.space'
   base: '/'
   trailingSlash: false
 

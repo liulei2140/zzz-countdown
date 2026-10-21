@@ -1,7 +1,14 @@
 ---
 import { ANALYTICS } from 'astrowind:config';
 
-const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.googleAnalytics.id) : '';
+/**
+ * The measurement ID comes from the build environment (`PUBLIC_GA_ID`), so the
+ * property can be moved or replaced without editing a tracked file. The value
+ * in src/config.yaml stays as a fallback for local previews.
+ */
+const envId = import.meta.env.PUBLIC_GA_ID?.trim();
+const configId = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.googleAnalytics.id) : '';
+const id = envId || configId;
 const partytown = !!ANALYTICS?.vendors?.googleAnalytics?.partytown;
 const scriptType = partytown ? 'text/partytown' : undefined;
 ---

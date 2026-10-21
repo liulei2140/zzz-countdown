@@ -70,10 +70,16 @@ text:
 
 ## Artwork
 
-All images are original, generated for this site, and live in
-`src/assets/images/`. No publisher artwork is used. `SectionArt.astro` renders
-a captioned full-width band; `PhaseTimeline.astro` draws the version cycle to
-scale with a live “you are here” marker.
+The game artwork is HoYoverse's own material, taken from the announcements
+already listed on `/sources` (the 3.3 update announcement, the Phase I channel
+notice, the Pre-Download notice and the Special Program Intel Report). It lives
+in `src/assets/images/official/` and is credited in the footer, on `/about` and
+on `/sources`. The remaining images under `src/assets/images/` are original
+artwork made for this site, used on the pages the publisher has no equivalent
+art for.
+
+`SectionArt.astro` renders a captioned full-width band; `PhaseTimeline.astro`
+draws the version cycle to scale with a live “you are here” marker.
 
 ## Per-version routine
 

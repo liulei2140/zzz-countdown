@@ -156,6 +156,24 @@ project `zzz-countdown` has both `zzzcountdown.space` and
 Cloudflare flattens the apex CNAME, so the root domain resolves without an A
 record.
 
+Two scripts cover the switchover:
+
+| Script                           | What it does                                                                                                                             |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/setup-custom-domain.sh` | Creates both CNAME records, waits for the host to answer, then builds, verifies and deploys with the custom domain as the canonical host |
+| `scripts/wait-and-deploy.sh`     | For when the records were added by hand: waits for the host, then builds, verifies and deploys                                           |
+
+`setup-custom-domain.sh` needs an API token that can edit DNS in that zone
+(`Zone / DNS / Edit`, `Zone / Zone / Read`, `Account / Cloudflare Pages / Edit`):
+
+```bash
+CLOUDFLARE_API_TOKEN=xxxx bash scripts/setup-custom-domain.sh
+```
+
+The same token is what the GitHub Actions deploy job is missing — with it
+stored as the `CLOUDFLARE_API_TOKEN` repository secret, pushes deploy by
+themselves.
+
 Everything on the site derives from one switch. `SITE_URL` rewrites the `site:`
 field in `src/config.yaml`, and the canonical link, Open Graph URL, sitemap,
 `robots.txt` and the Open Graph card all follow it — nothing else names the

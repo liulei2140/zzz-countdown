@@ -162,13 +162,16 @@ field in `src/config.yaml`, and the canonical link, Open Graph URL, sitemap,
 host. `npm run verify` asserts that those five agree with each other and that
 no host from an earlier domain is left behind.
 
-The Pages host `zzz-countdown.pages.dev` stays reachable as a fallback. To
-send it to the custom domain instead, add a redirect rule in
-`public/_redirects`:
+The Pages host `zzz-countdown.pages.dev` stays reachable as a fallback, but it
+redirects to the canonical host. `public/_redirects` holds the rules:
 
 ```
-/* https://zzzcountdown.space/:splat 301
+https://zzz-countdown.pages.dev/* https://zzzcountdown.space/:splat 301
+https://www.zzzcountdown.space/* https://zzzcountdown.space/:splat 301
 ```
+
+The apex is deliberately not in that list — redirecting the canonical host to
+itself would be a loop. `npm run verify` checks both.
 
 ## Analytics
 

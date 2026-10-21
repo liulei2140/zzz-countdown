@@ -382,6 +382,22 @@ console.log('\n=== domain ===');
   for (const stale of ['zzz-countdown.pages.dev', 'zzzcountdown.site']) {
     expect(!home.includes(stale), `the built page still references the old host "${stale}"`);
   }
+
+  // The redirects have to point at the canonical host, and the canonical host
+  // itself must not redirect — that would be a loop.
+  const redirects = readFileSync(resolve(root, 'dist/_redirects'), 'utf8');
+  const rules = redirects.split('\n').filter((l) => l.trim() && !l.trim().startsWith('#'));
+  console.log('  redirects:');
+  for (const rule of rules) {
+    console.log(`    ${rule}`);
+    const target = rule.split(/\s+/)[1];
+    expect(target?.startsWith(`https://${expectedHost}/`), `the redirect target ${target} is not on ${expectedHost}`);
+    expect(!rule.startsWith(`https://${expectedHost}/`), `the canonical host redirects to itself: ${rule}`);
+  }
+  expect(
+    redirects.includes('zzz-countdown.pages.dev') && redirects.includes('www.'),
+    'the redirects do not cover the Pages host and the www subdomain'
+  );
 }
 
 console.log('\n=== assertions ===');

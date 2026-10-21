@@ -14,7 +14,7 @@ import StructuredData from '~/components/common/StructuredData.astro';
 
 import { banners, faqs, sourceById } from '~/data/zzz';
 
-import phaseArt from '~/assets/images/phase-art.jpg';
+import phasePoster from '~/assets/images/official/phase1-poster.jpg';
 
 const metadata = {
   title: 'ZZZ 3.3 Banners: Phase 1 and Phase 2 Schedule with Live Countdowns',
@@ -53,11 +53,11 @@ const rule = sourceById('E03')!;
 
   <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6">
     <SectionArt
-      src={phaseArt.src}
-      alt="Two glowing ring portals on a dark horizon, standing for the two banner phases of Version 3.3"
+      src={phasePoster.src}
+      alt="Official Version 3.3 Phase I key art showing Phoenix and Velina"
       eyebrow="Phase I → Phase II"
       heading="Two phases, eight channels"
-      caption="Original artwork for this site."
+      caption="Official HoYoverse key art from the Version 3.3 channel notice."
     />
   </section>
 
@@ -87,9 +87,9 @@ const rule = sourceById('E03')!;
 
     <div class="mt-6">
       <Note
-        variant="warning"
-        title="The Phase II end time is still an estimate."
-        description="The official Phase I notice confirms the November 11 switch. The Phase II end time comes from the Intel Report and is confirmed when HoYoverse publishes the Phase II notice."
+        variant="info"
+        title="The Phase II window is printed in the official Intel Report."
+        description="The 3.3 Special Program Intel Report states “Signal Search Duration: 2026/11/11 12:00 – 2026/12/01 14:59 (Server time)”. The separate Phase II channel notice, with the final banner list, has not been published yet."
       />
     </div>
   </section>

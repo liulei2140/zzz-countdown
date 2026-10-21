@@ -95,6 +95,6 @@ export const footerData = {
     },
   ],
   footNote: `
-    <a class="text-blue-600 underline dark:text-muted" href="https://www.hoyolab.com/article/47149468">Version 3.3 "Journey to the Sky"</a> launches October 21, 2026. Independent fan site, not affiliated with HoYoverse.
+    <a class="text-blue-600 underline dark:text-muted" href="https://www.hoyolab.com/article/47149468">Version 3.3 "Journey to the Sky"</a> launches October 21, 2026. Independent fan site, not affiliated with HoYoverse. Artwork is official HoYoverse material, used for reference.
   `,
 };

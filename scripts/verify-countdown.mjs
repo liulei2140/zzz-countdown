@@ -204,17 +204,17 @@ function measure(page) {
 
 /** Pages that must carry at least one original image, and a word budget. */
 const density = [
-  { page: 'index.html', maxWords: 900, needsImage: true },
-  { page: 'banners/index.html', maxWords: 800, needsImage: true },
-  { page: 'release-time/index.html', maxWords: 760, needsImage: true },
-  { page: 'pre-download/index.html', maxWords: 760, needsImage: true },
-  { page: 'whats-new/index.html', maxWords: 800, needsImage: true },
-  { page: 'versions/index.html', maxWords: 340, needsImage: true },
-  { page: 'sources/index.html', maxWords: 560, needsImage: true },
-  { page: 'about/index.html', maxWords: 400, needsImage: true },
-  { page: 'contact/index.html', maxWords: 340, needsImage: true },
-  { page: 'privacy/index.html', maxWords: 300, needsImage: true },
-  { page: 'editorial-policy/index.html', maxWords: 430, needsImage: true },
+  { page: 'index.html', maxWords: 900, minImages: 7 },
+  { page: 'banners/index.html', maxWords: 800, minImages: 9 },
+  { page: 'release-time/index.html', maxWords: 760, minImages: 1 },
+  { page: 'pre-download/index.html', maxWords: 760, minImages: 1 },
+  { page: 'whats-new/index.html', maxWords: 800, minImages: 6 },
+  { page: 'versions/index.html', maxWords: 340, minImages: 1 },
+  { page: 'sources/index.html', maxWords: 560, minImages: 1 },
+  { page: 'about/index.html', maxWords: 400, minImages: 1 },
+  { page: 'contact/index.html', maxWords: 340, minImages: 1 },
+  { page: 'privacy/index.html', maxWords: 300, minImages: 1 },
+  { page: 'editorial-policy/index.html', maxWords: 430, minImages: 1 },
 ];
 
 console.log('\n=== density ===');
@@ -222,9 +222,7 @@ for (const d of density) {
   const m = measure(d.page);
   console.log(`  ${d.page.padEnd(26)} ${String(m.words).padStart(4)} words  ${m.images} image(s)`);
   expect(m.words <= d.maxWords, `${d.page} has ${m.words} words, over the ${d.maxWords} budget`);
-  if (d.needsImage) {
-    expect(m.images >= 1, `${d.page} has no image, it should carry artwork`);
-  }
+  expect(m.images >= d.minImages, `${d.page} has ${m.images} image(s), expected at least ${d.minImages}`);
 }
 
 // --- "The dates behind this update" must not leave a half-empty row ---------

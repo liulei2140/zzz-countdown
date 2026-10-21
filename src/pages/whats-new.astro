@@ -7,10 +7,11 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 
 import SectionArt from '~/components/widgets/SectionArt.astro';
 import KeyDates from '~/components/widgets/KeyDates.astro';
+import Image from '~/components/common/Image.astro';
 
 import { newContent, sourceById, SITE } from '~/data/zzz';
 
-import mechArt from '~/assets/images/mech-art.jpg';
+import journeyArt from '~/assets/images/official/mech.jpg';
 
 const metadata = {
   title: 'What\'s New in ZZZ 3.3 "Journey to the Sky": Phoenix, Severian and Mech Combat',
@@ -46,10 +47,10 @@ const attributeTone: Record<string, string> = {
 
   <section class="mx-auto max-w-7xl px-4 mt-10 sm:px-6">
     <SectionArt
-      src={mechArt.src}
-      alt="Abstract illustration of mechanical armour plates and glowing energy arcs assembling in a bright sky"
+      src={journeyArt.src}
+      alt="Official 3.3 art: the W-Engine showcase from the Special Program Intel Report"
       shape="wide"
-      caption="Original artwork for this site."
+      caption="Official HoYoverse art from the 3.3 Special Program Intel Report."
     />
   </section>
 
@@ -59,6 +60,18 @@ const attributeTone: Record<string, string> = {
       {
         newContent.agents.map((a) => (
           <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+            <Image
+              src={a.image}
+              alt={`Official key art for ${a.title}`}
+              width={880}
+              height={495}
+              widths={[440, 880]}
+              sizes="(max-width: 768px) 100vw, 560px"
+              layout="constrained"
+              format="webp"
+              class="aspect-[16/9] w-full object-cover"
+              loading="lazy"
+            />
             <div class:list={['h-2 bg-gradient-to-r', attributeTone[a.attribute] ?? 'from-cyan-500 to-blue-600']} />
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -98,10 +111,24 @@ const attributeTone: Record<string, string> = {
     <div class="mt-6 grid gap-4 sm:grid-cols-3">
       {
         newContent.wEngines.map((w) => (
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
-            <p class="text-xs font-semibold uppercase tracking-wider text-muted">{w.phase}</p>
-            <p class="mt-2 text-lg font-bold text-heading">{w.name}</p>
-            <p class="mt-1 text-sm text-muted">{w.attribute}</p>
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+            <Image
+              src={w.image}
+              alt={`Official key art for the ${w.name} W-Engine`}
+              width={560}
+              height={315}
+              widths={[280, 560]}
+              sizes="(max-width: 640px) 100vw, 320px"
+              layout="constrained"
+              format="webp"
+              class="aspect-[16/9] w-full object-cover"
+              loading="lazy"
+            />
+            <div class="p-5">
+              <p class="text-xs font-semibold uppercase tracking-wider text-muted">{w.phase}</p>
+              <p class="mt-2 text-lg font-bold text-heading">{w.name}</p>
+              <p class="mt-1 text-sm text-muted">{w.attribute}</p>
+            </div>
           </div>
         ))
       }

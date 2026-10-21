@@ -131,7 +131,7 @@ const kinds: Record<string, string> = {
     <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">
       What is an estimate, not an official time
     </h2>
-    <div class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
       <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
         <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
         <p class="mt-2 text-base font-bold text-heading">The go-live minute</p>
@@ -142,16 +142,16 @@ const kinds: Record<string, string> = {
       </div>
       <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
         <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
-        <p class="mt-2 text-base font-bold text-heading">The Phase II banner end</p>
-        <p class="mt-2 text-sm text-muted">
-          Taken from the Intel Report and the community schedule until the official Phase II notice is published.
-        </p>
-      </div>
-      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Estimate</p>
         <p class="mt-2 text-base font-bold text-heading">The next version date</p>
         <p class="mt-2 text-sm text-muted">Expected around 2026/12/02 on the 42-day cadence. Not announced.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 mt-12 sm:px-6">
+    <h2 class="text-2xl font-bold tracking-tight text-heading md:text-3xl">Where the images come from</h2>
+    <div class="mt-4">
+      <Note variant="info" title="Official HoYoverse artwork" description={SITE.imageCredit} />
     </div>
   </section>
 

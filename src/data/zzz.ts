@@ -12,7 +12,23 @@
  *
  * Do not add a date here without an official announcement behind it. Estimates
  * are allowed but must be flagged with `estimated: true`.
+ *
+ * Artwork: every file under `assets/images/official/` is HoYoverse's own
+ * material, taken from the announcements in `sources` (the 3.3 update
+ * announcement, the Phase I channel notice and the Special Program Intel
+ * Report). The remaining images are original artwork made for this site.
  */
+
+import type { ImageMetadata } from 'astro';
+
+import chanPhoenix from '~/assets/images/official/chan-phoenix.jpg';
+import chanVelina from '~/assets/images/official/chan-velina.jpg';
+import chanPlume from '~/assets/images/official/chan-plume.jpg';
+import chanJoyau from '~/assets/images/official/chan-joyau.jpg';
+import chanSeverian from '~/assets/images/official/chan-severian.jpg';
+import chanNorma from '~/assets/images/official/chan-norma.jpg';
+import chanIncarcerating from '~/assets/images/official/chan-incarcerating.jpg';
+import chanChief from '~/assets/images/official/chan-chief.jpg';
 
 export const SITE = {
   name: 'ZZZ Countdown',
@@ -23,6 +39,8 @@ export const SITE = {
   lastChecked: '2026-10-21 18:00 (UTC+8)',
   disclaimer:
     'Independent fan site. Not affiliated with HoYoverse or miHoYo. Version dates follow the official announcements linked on this page.',
+  imageCredit:
+    'Artwork on this site is official HoYoverse material, taken from the Version 3.3 announcements linked on the sources page, used for reference. All copyrights belong to HoYoverse.',
 } as const;
 
 export type Source = {
@@ -164,8 +182,8 @@ export const milestones: Milestone[] = [
     label: 'Phase II banners end',
     at: '2026-12-01T14:59:00+08:00',
     clock: 'server',
-    sourceId: 'E02',
-    note: 'End of the 3.3 banner cycle, one day before the version itself ends.',
+    sourceId: 'E04',
+    note: 'The 3.3 Intel Report prints the Phase II Signal Search window: 2026/11/11 12:00 - 2026/12/01 14:59 (server time).',
   },
   {
     id: 'version-end',
@@ -294,6 +312,8 @@ export type Banner = {
   end: string;
   endIso: string;
   sourceId: string;
+  /** Official artwork for this channel, taken from the announcement in `sourceId`. */
+  image: ImageMetadata;
   highlight?: boolean;
 };
 
@@ -307,7 +327,8 @@ export const banners: Banner[] = [
     start: '2026-10-21 06:00 (UTC+8)',
     end: '2026-11-11 11:59 (server time)',
     endIso: '2026-11-11T11:59:00+08:00',
-    sourceId: 'E02',
+    sourceId: 'E03',
+    image: chanPhoenix,
     highlight: true,
   },
   {
@@ -320,6 +341,7 @@ export const banners: Banner[] = [
     end: '2026-11-11 11:59 (server time)',
     endIso: '2026-11-11T11:59:00+08:00',
     sourceId: 'E03',
+    image: chanVelina,
   },
   {
     phase: 'Phase I',
@@ -331,6 +353,7 @@ export const banners: Banner[] = [
     end: '2026-11-11 11:59 (server time)',
     endIso: '2026-11-11T11:59:00+08:00',
     sourceId: 'E03',
+    image: chanPlume,
   },
   {
     phase: 'Phase I',
@@ -342,6 +365,7 @@ export const banners: Banner[] = [
     end: '2026-11-11 11:59 (server time)',
     endIso: '2026-11-11T11:59:00+08:00',
     sourceId: 'E03',
+    image: chanJoyau,
   },
   {
     phase: 'Phase II',
@@ -352,19 +376,21 @@ export const banners: Banner[] = [
     start: '2026-11-11 12:00 (server time)',
     end: '2026-12-01 14:59 (server time)',
     endIso: '2026-12-01T14:59:00+08:00',
-    sourceId: 'E02',
+    sourceId: 'E04',
+    image: chanSeverian,
     highlight: true,
   },
   {
     phase: 'Phase II',
     name: 'Norma',
     kind: 'Agent',
-    attribute: '',
+    attribute: 'Fire - Stun',
     channel: 'Outlier of Prodigies',
     start: '2026-11-11 12:00 (server time)',
     end: '2026-12-01 14:59 (server time)',
     endIso: '2026-12-01T14:59:00+08:00',
     sourceId: 'E04',
+    image: chanNorma,
   },
   {
     phase: 'Phase II',
@@ -375,18 +401,20 @@ export const banners: Banner[] = [
     start: '2026-11-11 12:00 (server time)',
     end: '2026-12-01 14:59 (server time)',
     endIso: '2026-12-01T14:59:00+08:00',
-    sourceId: 'E02',
+    sourceId: 'E04',
+    image: chanIncarcerating,
   },
   {
     phase: 'Phase II',
     name: 'Chief Sidekick',
     kind: 'W-Engine',
-    attribute: '',
+    attribute: 'Stun',
     channel: '"Chief Sidekick" Signal Search',
     start: '2026-11-11 12:00 (server time)',
     end: '2026-12-01 14:59 (server time)',
     endIso: '2026-12-01T14:59:00+08:00',
     sourceId: 'E04',
+    image: chanChief,
   },
 ];
 
@@ -455,6 +483,7 @@ export const newContent = {
       title: 'Phoenix Reffaella',
       attribute: 'Fire - Anomaly',
       channel: 'Into the Flames of Life',
+      image: chanPhoenix,
       blurb:
         'Limited S-Rank Fire Anomaly Agent. Her damage scales with the Anomaly attribute, and ally Anomaly boosts raise her critical hits.',
     },
@@ -463,13 +492,14 @@ export const newContent = {
       title: 'Severian Lowell',
       attribute: 'Wind - Attack',
       channel: 'Answers in the Wind',
+      image: chanSeverian,
       blurb: 'Limited S-Rank Wind Attack Agent arriving in Phase II, and the second half of the 3.3 story.',
     },
   ],
   wEngines: [
-    { name: 'Plume of Rebirth', attribute: 'Anomaly', phase: 'Phase I' },
-    { name: 'Incarcerating Grip', attribute: 'Attack', phase: 'Phase II' },
-    { name: 'Candlelit Scheme', attribute: 'Armorer', phase: 'Phase II' },
+    { name: 'Plume of Rebirth', attribute: 'Anomaly', phase: 'Phase I', image: chanPlume },
+    { name: 'Incarcerating Grip', attribute: 'Attack', phase: 'Phase II', image: chanIncarcerating },
+    { name: 'Candlelit Scheme', attribute: 'Armorer', phase: 'Phase II', image: chanChief },
   ],
   outfits: [
     { name: 'Daydream Complex', owner: 'Phoenix', kind: 'Outfit' },
@@ -640,7 +670,7 @@ export const faqs = {
     {
       title: 'Is Phase 2 confirmed?',
       description:
-        'The Phase II lineup and window were published in the 3.3 Intel Report on October 9. The exact end time is listed as an estimate until the official Phase II notice appears.',
+        'The window is. The 3.3 Intel Report prints “Signal Search Duration: 2026/11/11 12:00 – 2026/12/01 14:59 (Server time)”. The separate Phase II channel notice, with the final banner list, is still to come.',
     },
     {
       title: 'Should I pull in Phase I or save for Phase II?',

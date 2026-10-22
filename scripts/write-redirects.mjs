@@ -1,51 +1,39 @@
 #!/usr/bin/env node
 /**
- * Write `public/_redirects` for whichever host the site is being built for.
+ * Write `public/_redirects`.
  *
- * The canonical host is `zzzcountdown.space`. While the domain is still
- * being pointed at Cloudflare, the site is served from the Pages host, and
- * the two states need opposite rules:
+ * Cloudflare Pages only supports *path-level* redirects in this file —
+ * "Domain-level redirects" are explicitly listed as unsupported in the Pages
+ * documentation, and a rule whose source is a full URL is silently ignored.
+ * So this file deliberately holds no redirect rules.
  *
- * - canonical host is the custom domain: send the Pages host and the www
- *   subdomain to it, and never to itself;
- * - canonical host is the Pages host (the transition period): there is
- *   nothing to redirect, because a redirect to the custom domain would
- *   point at a host that does not resolve yet.
+ * The two redirects this site actually wants are domain-level:
  *
- * The file is generated so the rules can never contradict the canonical
- * host. `npm run verify` checks the result against the built site.
+ *   zzz-countdown.pages.dev/*  ->  zzzcountdown.space/*   (301)
+ *   www.zzzcountdown.space/*   ->  zzzcountdown.space/*   (301)
+ *
+ * Those belong in Cloudflare's Bulk Redirects (zone level), which the
+ * dashboard exposes under Rules -> Redirect Rules, or in the account-level
+ * Bulk Redirects. They cannot be expressed here.
+ *
+ * The file is kept as a place for that note, and so the build always ships
+ * one: a stale `_redirects` with domain rules in it would look like the
+ * redirect was configured when it never was.
  *
  * Run: node scripts/write-redirects.mjs
  */
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outFile = resolve(root, 'public/_redirects');
 
-const CUSTOM_DOMAIN = 'zzzcountdown.space';
-const PAGES_HOST = 'zzz-countdown.pages.dev';
+const contents = `# Cloudflare Pages does not support domain-level redirects in this file.
+# The pages.dev host and the www subdomain are redirected to the canonical
+# host in Cloudflare's Bulk Redirects instead (Rules -> Redirect Rules).
+# Only path-level rules belong here; none are needed at the moment.
+`;
 
-const config = await readFile(resolve(root, 'src/config.yaml'), 'utf8');
-const configured = config.match(/^\s{2}site:\s*['"]?(https?:\/\/[^'"\n]+)/m)?.[1];
-const host = configured ? new URL(configured).host : '';
-
-if (host === CUSTOM_DOMAIN) {
-  const rules = [
-    `# Send the Pages host to the canonical host.`,
-    `https://${PAGES_HOST}/* https://${CUSTOM_DOMAIN}/:splat 301`,
-    `# Same for the www subdomain.`,
-    `https://www.${CUSTOM_DOMAIN}/* https://${CUSTOM_DOMAIN}/:splat 301`,
-    `# The canonical host is deliberately absent: redirecting it to itself`,
-    `# would be a loop.`,
-  ];
-  await writeFile(outFile, `${rules.join('\n')}\n`, 'utf8');
-  console.log(`[write-redirects] ${PAGES_HOST} and www -> ${CUSTOM_DOMAIN}`);
-} else if (host === PAGES_HOST) {
-  await writeFile(outFile, '', 'utf8');
-  console.log(`[write-redirects] canonical host is ${PAGES_HOST}; no redirects written`);
-} else {
-  await writeFile(outFile, '', 'utf8');
-  console.log(`[write-redirects] unknown canonical host "${host}"; no redirects written`);
-}
+await writeFile(outFile, contents, 'utf8');
+console.log('[write-redirects] no path-level redirects needed');

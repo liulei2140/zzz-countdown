@@ -390,28 +390,22 @@ console.log('\n=== domain ===');
     expect(host === expectedHost, `the built page names the site's own host "${host}", expected ${expectedHost}`);
   }
 
-  // The redirects have to point at the canonical host, and the canonical host
-  // itself must not redirect — that would be a loop.
+  // Cloudflare Pages ignores any `_redirects` rule whose source is a full
+  // URL — domain-level redirects are not supported there. A rule like that
+  // would look configured while doing nothing, so none may ship.
   const redirects = readFileSync(resolve(root, 'dist/_redirects'), 'utf8');
   const rules = redirects.split('\n').filter((l) => l.trim() && !l.trim().startsWith('#'));
-  console.log('  redirects:');
+  console.log(`  path-level redirects: ${rules.length}`);
   for (const rule of rules) {
     console.log(`    ${rule}`);
-    const [source, target] = rule.split(/\s+/);
-    expect(target?.startsWith(`https://${expectedHost}/`), `the redirect target ${target} is not on ${expectedHost}`);
-    expect(!source?.startsWith(`https://${expectedHost}/`), `the canonical host redirects to itself: ${rule}`);
+    expect(!rule.includes('://'), `the Pages redirect "${rule}" is domain-level and would be ignored`);
+    const [, target] = rule.split(/\s+/);
+    expect(!target?.startsWith(`https://${expectedHost}/`), `the canonical host redirects to itself: ${rule}`);
   }
-  // The Pages host and the www subdomain are covered once the custom domain
-  // is the canonical one. Before that there is nothing to redirect, because
-  // the custom domain does not resolve yet.
-  if (expectedHost === 'zzzcountdown.space') {
-    expect(
-      redirects.includes('zzz-countdown.pages.dev') && redirects.includes('www.'),
-      'the redirects do not cover the Pages host and the www subdomain'
-    );
-  } else {
-    expect(rules.length === 0, `no redirect should exist while the canonical host is ${expectedHost}`);
-  }
+  expect(
+    rules.every((rule) => !rule.includes('://')),
+    'the redirect file contains a domain-level rule, which Cloudflare Pages ignores'
+  );
 }
 
 console.log('\n=== assertions ===');

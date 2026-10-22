@@ -180,22 +180,27 @@ field in `src/config.yaml`, and the canonical link, Open Graph URL, sitemap,
 host. `npm run verify` asserts that those five agree with each other and that
 no host from an earlier domain is left behind.
 
-The Pages host `zzz-countdown.pages.dev` stays reachable as a fallback, but it
-redirects to the canonical host. `scripts/write-redirects.mjs` writes
-`public/_redirects` on every build, because the right rules depend on which
-host is canonical:
+### Redirects
+
+Cloudflare Pages supports only **path-level** redirects in a `_redirects`
+file — domain-level redirects are explicitly listed as unsupported, and a
+rule whose source is a full URL is silently ignored. The two redirects this
+site wants are both domain-level, so they live in Cloudflare's **Bulk
+Redirects** instead (dashboard: _Rules → Redirect Rules_), not in the repo:
 
 ```
-https://zzz-countdown.pages.dev/* https://zzzcountdown.space/:splat 301
-https://www.zzzcountdown.space/* https://zzzcountdown.space/:splat 301
+zzz-countdown.pages.dev/*  ->  zzzcountdown.space/*   301
+www.zzzcountdown.space/*   ->  zzzcountdown.space/*   301
 ```
 
-The apex is deliberately not in that list — redirecting the canonical host to
-itself would be a loop. While the custom domain is still being pointed at
-Cloudflare and the canonical host is still the Pages host, the script writes
-no rules at all, because a redirect to a host that does not resolve yet would
-send every visitor nowhere. `npm run verify` checks the rules against the
-built site.
+`scripts/write-redirects.mjs` writes `public/_redirects` on every build with
+no rules in it, plus a note about where the real ones live. `npm run verify`
+fails if a domain-level rule ever appears in that file, because such a rule
+would look configured while doing nothing.
+
+Until the Bulk Redirects rules exist, the Pages host still serves the site
+with the canonical link pointing at `zzzcountdown.space`, so search engines
+treat it as a copy of the canonical host rather than a second site.
 
 ## Analytics
 

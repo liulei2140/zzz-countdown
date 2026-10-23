@@ -37,6 +37,9 @@ analytics:
   vendors:
     googleAnalytics:
       id: null # or "G-XXXXXXXXXX"
+      # The Partytown integration is disabled in astro.config.ts, so keep GA4
+      # on the main thread instead of emitting inert text/partytown scripts.
+      partytown: false
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

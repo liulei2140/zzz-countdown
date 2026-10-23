@@ -330,6 +330,12 @@ console.log('\n=== analytics ===');
   console.log(`  GA4 measurement id: ${gaId ?? '(missing)'}`);
   expect(Boolean(gaId), 'the home page does not load Google Analytics');
   expect(gaId === 'G-6S85YYNPTX', `unexpected GA4 measurement id "${gaId}"`);
+  const gaScript =
+    home.match(/<script[^>]*src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=[^"]+"[^>]*>/)?.[0] ?? '';
+  expect(
+    !/type="text\/partytown"/.test(gaScript),
+    'GA4 is marked for Partytown, but the Partytown integration is disabled'
+  );
   expect(/gtag\(\s*['"]config['"]/.test(home), 'the GA4 config call is missing');
 
   const privacy = readFileSync(resolve(root, 'dist/privacy/index.html'), 'utf8');
